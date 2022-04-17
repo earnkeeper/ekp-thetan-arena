@@ -6,6 +6,7 @@ export class MarketBuyDocument extends DocumentDto {
   }
   readonly battleCap: number;
   readonly battleCapMax: number;
+  readonly battlesRemaining: number;
   readonly created: number;
   readonly dmg: number;
   readonly fiatSymbol?: string;

@@ -7,3 +7,9 @@ export const THETAN_MARKET_ADDRESS =
   '0x7bf5d1dec7e36d5b4e9097b48a1b9771e6c96aa4';
 export const THETAN_MATCH_TOPIC =
   '0x7ec91832f8e94cceb462065487af39394e7520f22662d527e383864c041380cf';
+
+export const HERO_RARITY_MAP = {
+  0: 'Common',
+  1: 'Epic',
+  2: 'Legendary',
+};
