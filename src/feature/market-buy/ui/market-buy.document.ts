@@ -10,10 +10,10 @@ export class MarketBuyDocument extends DocumentDto {
   readonly created: number;
   readonly dmg: number;
   readonly fiatSymbol?: string;
-  readonly heroName: string;
-  readonly heroRarityId: number;
-  readonly heroRoleId: number;
-  readonly heroTypeId: number;
+  readonly name: string;
+  readonly rarity: number;
+  readonly role: number;
+  readonly type: number;
   readonly hp: number;
   readonly lastModified: number;
   readonly level: number;
@@ -27,5 +27,5 @@ export class MarketBuyDocument extends DocumentDto {
   readonly skinName: string;
   readonly statusId: number;
   readonly tokenId: string;
-  readonly trophyClassId: number;
+  readonly trophyClass: number;
 }

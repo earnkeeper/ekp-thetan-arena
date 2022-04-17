@@ -184,14 +184,15 @@ export class MarketBuyProcessor {
           updated: now,
           battleCap: dto.battleCap,
           battleCapMax: dto.battleCapMax,
+          battlesRemaining: dto.battleCapMax - dto.battleCap,
           created: moment(dto.created).unix(),
           dmg: dto.dmg,
-          heroName: dto.name,
-          heroRarityId: dto.heroRarity,
+          name: dto.name,
+          rarity: dto.heroRarity,
           skinId: dto.skinId,
           skinName: dto.skinName,
-          heroRoleId: dto.heroRole,
-          heroTypeId: dto.heroTypeId,
+          role: dto.heroRole,
+          type: dto.heroTypeId,
           hp: dto.hp,
           lastModified: moment(dto.lastModified).unix(),
           level: dto.level,
@@ -202,7 +203,7 @@ export class MarketBuyProcessor {
           refId: dto.refId,
           statusId: dto.status,
           tokenId: dto.tokenId,
-          trophyClassId: dto.trophyClass,
+          trophyClass: dto.trophyClass,
         };
 
         return document;
