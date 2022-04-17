@@ -2,18 +2,18 @@ FROM node:16.13.1
 
 WORKDIR /app 
 
-COPY package.json /app 
-COPY package-lock.json /app
+COPY package.json ./
+COPY package-lock.json ./
 
 RUN npm ci
 
-COPY ./src /app 
-COPY ./public /app 
-COPY ./LICENSE /app 
-COPY ./nest-cli.json /app 
-COPY ./README.md /app 
-COPY ./tsconfig.build.json /app 
-COPY ./tsconfig.json /app 
+COPY ./src/ ./
+COPY ./public/ ./
+COPY ./LICENSE ./
+COPY ./nest-cli.json ./
+COPY ./README.md ./
+COPY ./tsconfig.build.json ./ 
+COPY ./tsconfig.json ./ 
 
 RUN npm run build
 
