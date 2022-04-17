@@ -179,31 +179,48 @@ export class MarketBuyProcessor {
           ),
         );
 
+        const type = dto.heroTypeId;
+
+        let skinId = dto.skinId;
+
+        if (type > 0) {
+          skinId = skinId - type * 100 + type * 1000;
+        }
+
+        let battleColor = 'success';
+
+        if (dto.battleCap / dto.battleCapMax > 0.8) {
+          battleColor = 'danger';
+        } else if (dto.battleCap / dto.battleCapMax > 0.6) {
+          battleColor = 'warning';
+        }
+
         const document: MarketBuyDocument = {
           id: dto.id,
           updated: now,
           battleCap: dto.battleCap,
           battleCapMax: dto.battleCapMax,
+          battleColor,
           battlesRemaining: dto.battleCapMax - dto.battleCap,
           created: moment(dto.created).unix(),
           dmg: dto.dmg,
-          name: dto.name,
-          rarity: dto.heroRarity,
-          skinId: dto.skinId,
-          skinName: dto.skinName,
-          role: dto.heroRole,
-          type: dto.heroTypeId,
           hp: dto.hp,
           lastModified: moment(dto.lastModified).unix(),
           level: dto.level,
+          name: dto.name,
           ownerAddress: dto.ownerAddress,
           ownerId: dto.ownerId,
           price,
           priceSymbol: dto.systemCurrency.name,
+          rarity: dto.heroRarity,
           refId: dto.refId,
+          role: dto.heroRole,
+          skinId,
+          skinName: dto.skinName,
           statusId: dto.status,
           tokenId: dto.tokenId,
           trophyClass: dto.trophyClass,
+          type: dto.heroTypeId,
         };
 
         return document;

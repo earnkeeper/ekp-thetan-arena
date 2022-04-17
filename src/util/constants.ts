@@ -8,8 +8,27 @@ export const THETAN_MARKET_ADDRESS =
 export const THETAN_MATCH_TOPIC =
   '0x7ec91832f8e94cceb462065487af39394e7520f22662d527e383864c041380cf';
 
-export const HERO_RARITY_MAP = {
+export const RARITY_MAP = {
   0: 'Common',
   1: 'Epic',
   2: 'Legendary',
+};
+
+export const ROLE_MAP = {
+  0: 'Tank',
+  1: 'Marksman',
+  2: 'Assasin',
+};
+
+export const TROPHY_MAP = {
+  0: 'H',
+  1: 'G',
+  2: 'F',
+  3: 'E',
+  4: 'D',
+  5: 'C',
+  6: 'B',
+  7: 'A',
+  8: 'S',
+  9: 'SS',
 };

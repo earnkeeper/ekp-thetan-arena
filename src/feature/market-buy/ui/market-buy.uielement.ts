@@ -4,7 +4,6 @@ import {
   Container,
   Datatable,
   documents,
-  formatCurrency,
   formatTemplate,
   Image,
   isBusy,
@@ -13,6 +12,16 @@ import {
   Span,
   UiElement,
 } from '@earnkeeper/ekp-sdk';
+import {
+  BATTLE_CAP_COLUMN,
+  LEVEL_COLUMN,
+  NAME_COLUMN,
+  PRICE_COLUMN,
+  RARITY_COLUMN,
+  ROLE_COLUMN,
+  SKIN_COLUMN,
+  TROPHY_COLUMN,
+} from '../../../util';
 import { MarketBuyDocument } from './market-buy.document';
 
 export default function element(): UiElement {
@@ -68,26 +77,16 @@ function marketRow(): UiElement {
       true,
       true,
     ),
-    filters: [
-      { columnId: 'heroRarityId', type: 'checkbox' },
-      { columnId: 'skinName', type: 'checkbox' },
-      { columnId: 'level', type: 'checkbox' },
-    ],
+    filters: [{ columnId: 'rarity', type: 'checkbox' }],
     columns: [
-      { id: 'heroName' },
-      { id: 'skinName' },
-      { id: 'battleCap' },
-      { id: 'heroRarityId' },
-      { id: 'battleCapMax' },
-      { id: 'trophyClassId' },
-      { id: 'skinName' },
-      { id: 'level' },
-      { id: 'heroRoleId' },
-      { id: 'price' },
-      {
-        id: 'priceFiat',
-        format: formatCurrency('$.priceFiat', '$.fiatSymbol'),
-      },
+      NAME_COLUMN,
+      LEVEL_COLUMN,
+      BATTLE_CAP_COLUMN,
+      TROPHY_COLUMN,
+      { ...RARITY_COLUMN, omit: true },
+      ROLE_COLUMN,
+      PRICE_COLUMN,
+      { ...SKIN_COLUMN, omit: true },
     ],
   });
 }

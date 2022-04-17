@@ -3,9 +3,12 @@ import { NestFactory } from '@nestjs/core';
 import * as cluster from 'cluster';
 import { GatewayModule } from './gateway.module';
 import { WorkerModule } from './worker.module';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import { join } from 'path';
 
 const gatewayBootstrap = async () => {
-  const app = await NestFactory.create(GatewayModule);
+  const app = await NestFactory.create<NestExpressApplication>(GatewayModule);
+  app.useStaticAssets(join(__dirname, '..', 'public'));
   app.enableShutdownHooks();
   await app.listen(3001);
 };

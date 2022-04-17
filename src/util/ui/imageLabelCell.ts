@@ -8,7 +8,7 @@ export function imageLabelCell(src: Rpc, content: Rpc) {
         children: [
           Image({
             src,
-            size: '12px',
+            height: '16px',
           }),
         ],
       }),

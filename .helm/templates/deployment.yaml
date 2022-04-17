@@ -44,6 +44,8 @@ spec:
               value: '{{ .Values.proxy.host }}'
             - name: PROXY_PORT
               value: '{{ .Values.proxy.port }}'
+            - name: PUBLIC_URL
+              value: '{{ .Release.Name }}.{{ .Values.ingress.hostname }}'
           ports:
             - containerPort: 3001
               protocol: TCP
