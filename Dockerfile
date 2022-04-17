@@ -8,6 +8,7 @@ COPY package-lock.json /app
 RUN npm ci
 
 COPY ./src /app 
+COPY ./public /app 
 COPY ./LICENSE /app 
 COPY ./nest-cli.json /app 
 COPY ./README.md /app 
