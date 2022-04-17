@@ -1,0 +1,34 @@
+export type MarketListingDto = Readonly<{
+  id: string;
+  created: string;
+  lastModified: string;
+  ownerId: string;
+  ownerAddress: string;
+  tokenId: string;
+  refId: string;
+  refType: number;
+  price: number;
+  systemCurrency: {
+    type: number;
+    name: string;
+    value: number;
+    decimals: number;
+  };
+  hp: number;
+  dmg: number;
+  heroTypeId: number;
+  heroRole: number;
+  heroRarity: number;
+  skinId: number;
+  skinRarity: number;
+  status: number;
+  marketType: number;
+  level: number;
+  trophyClass: number;
+  battleCap: number;
+  imageAvatar: string;
+  imageFull: string;
+  name: string;
+  skinName: string;
+  battleCapMax: number;
+}>;

@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-app-deploy
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-app
+  revisionHistoryLimit: 3
+  strategy:
+    type: RollingUpdate
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-app
+    spec:
+      containers:
+        - name: {{ .Release.Name }}-nodejs
+          image: '{{ .Values.werf.image.app }}'
+          workingDir: /app
+          env:
+            - name: EKP_PLUGIN_ID
+              value: {{ .Chart.Name }}
+            - name: EKP_PLUGIN_NAME
+              value: '.'
+            - name: MONGO_HOST
+              value: '{{ .Values.mongodb.host }}'
+            - name: MONGO_DB_NAME
+              value: {{ .Chart.Name }}
+            - name: MONGO_USER
+              value: {{ .Chart.Name }}
+            - name: MONGO_PASSWORD
+              value: '{{ .Values.mongodb.password }}'
+            - name: REDIS_HOST
+              value: '{{ .Release.Name }}-redis-master'
+            - name: NODE_ENV
+              value: '{{ .Values.werf.env | default "production" }}'
+            - name: PROXY_HOST
+              value: '{{ .Values.proxy.host }}'
+            - name: PROXY_PORT
+              value: '{{ .Values.proxy.port }}'
+          ports:
+            - containerPort: 3001
+              protocol: TCP
