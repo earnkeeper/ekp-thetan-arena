@@ -66,7 +66,7 @@ function titleRow() {
         children: [
           Span({
             className: 'font-medium-5',
-            content: 'Buy Heroes',
+            content: 'Rent Heroes',
           }),
         ],
       }),
