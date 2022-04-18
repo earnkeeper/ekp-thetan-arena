@@ -25,7 +25,7 @@ import {
   SKIN_COLUMN,
   TOTAL_DAYS_COLUMN,
   TROPHY_COLUMN,
-  WinRateForm,
+  winRateForm,
 } from '../../../util';
 import { MarketBuyDocument } from './market-buy.document';
 
@@ -34,7 +34,7 @@ export default function element(): UiElement {
     children: [
       titleRow(),
       instructionsRow(),
-      WinRateForm(MarketBuyDocument),
+      winRateForm(MarketBuyDocument),
       marketRow(),
     ],
   });
@@ -44,7 +44,7 @@ function instructionsRow() {
   return Span({
     className: 'd-block mt-1 mb-2 font-small-4',
     content:
-      'Browse the Thetan Arena marketplace for the heroes with the best ROI. This list updates automatically once every minute and on each sale.',
+      'Browse the Thetan Arena marketplace for the heroes with the best profit. This list updates automatically once every minute and on each sale.',
   });
 }
 

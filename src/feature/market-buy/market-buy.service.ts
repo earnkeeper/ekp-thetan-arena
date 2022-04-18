@@ -2,9 +2,8 @@ import { CurrencyDto } from '@earnkeeper/ekp-sdk';
 import { CacheService, CoingeckoService } from '@earnkeeper/ekp-sdk-nestjs';
 import { Injectable } from '@nestjs/common';
 import _ from 'lodash';
-import { WinRateForm } from '../../util';
 import { CACHE_MARKET_BUY_DOCUMENTS } from '../../util/constants';
-import { DEFAULT_WIN_RATE_FORM } from '../../util/forms';
+import { DEFAULT_WIN_RATE_FORM, WinRateForm } from '../../util/forms';
 import { MarketBuyDocument } from './ui/market-buy.document';
 
 @Injectable()
@@ -34,6 +33,10 @@ export class MarketBuyService {
     const expectedWinRate = Number(
       (form?.winRate ?? DEFAULT_WIN_RATE_FORM.winRate).replace(' %', ''),
     );
+    const profitableOnly =
+      form?.profitableOnly ?? DEFAULT_WIN_RATE_FORM.profitableOnly;
+
+    console.log(profitableOnly);
 
     const updatedDocuments: MarketBuyDocument[] = _.chain(documents)
       .filter((document) => document.battleCap > 0)
@@ -187,6 +190,7 @@ export class MarketBuyService {
 
         return updatedDocument;
       })
+      .filter((document) => profitableOnly !== 'Yes' || document.profit > 0)
       .value();
 
     return updatedDocuments;

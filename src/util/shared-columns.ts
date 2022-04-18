@@ -27,10 +27,11 @@ export const RARITY_COLUMN = {
 
 export const NAME_COLUMN = {
   id: 'name',
-  minWidth: '400px',
+  minWidth: '350px',
   searchable: true,
   sortable: true,
   cell: Row({
+    className: 'p-0',
     children: [
       Col({
         className: 'col-auto my-auto',
@@ -77,6 +78,7 @@ export const NAME_COLUMN = {
                 className: 'col-12 p-0 font-medium-2 font-weight-bold',
                 children: [
                   Row({
+                    className: 'p-0',
                     children: [
                       Col({
                         className: 'col-auto',
@@ -97,7 +99,7 @@ export const NAME_COLUMN = {
                         ],
                       }),
                       Col({
-                        className: 'col-auto pl-0',
+                        className: 'col-auto px-0',
                         children: [
                           Image({
                             src: formatTemplate(
