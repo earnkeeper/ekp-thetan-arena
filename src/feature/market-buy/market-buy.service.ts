@@ -40,7 +40,7 @@ export class MarketBuyService {
       .map((document) => {
         const coinPrice = prices.find((it) => it.coinId === 'thetan-coin');
 
-        let winReward = 6;
+        const winReward = 6;
 
         const lossReward = 1;
 
@@ -48,54 +48,76 @@ export class MarketBuyService {
 
         switch (document.rarity) {
           case 0:
-            winBonus = 3.25;
-            break;
-          case 1:
-            winBonus = 6.5;
-            break;
-          case 2:
-            winBonus = 23.55;
             switch (document.level) {
-              case 2:
-              case 3:
-                winReward *= 1.025;
-                break;
-              case 4:
-              case 5:
-                winReward *= 1.05;
-                break;
-              case 6:
-              case 7:
-                winReward *= 1.075;
+              case 11:
+              case 10:
+              case 9:
+                winBonus = 4.032;
                 break;
               case 8:
-              case 9:
-                winReward *= 1.1;
+              case 7:
+                winBonus = 3.739;
                 break;
-              case 10:
-              case 11:
-                winReward *= 1.125;
+              case 6:
+              case 5:
+                winBonus = 3.511;
+                break;
+              case 4:
+              case 3:
+                winBonus = 3.348;
+                break;
+              default:
+                winBonus = 3.25;
                 break;
             }
+            break;
+          case 1:
             switch (document.level) {
-              case 3:
-              case 4:
-                winBonus += 0.75;
-                break;
-              case 5:
-              case 6:
-                winBonus += 2;
-                break;
-              case 7:
-              case 8:
-                winBonus += 3.75;
-                break;
-              case 9:
-              case 10:
-                winBonus += 6;
-                break;
               case 11:
-                winBonus += 8.75;
+              case 10:
+              case 9:
+                winBonus = 8.06;
+                break;
+              case 8:
+              case 7:
+                winBonus = 7.475;
+                break;
+              case 6:
+              case 5:
+                winBonus = 7.02;
+                break;
+              case 4:
+              case 3:
+                winBonus = 6.695;
+                break;
+              default:
+                winBonus = 6.5;
+                break;
+            }
+            break;
+          case 2:
+            switch (document.level) {
+              case 11:
+                winBonus = 31.795;
+                break;
+              case 10:
+              case 9:
+                winBonus = 29.204;
+                break;
+              case 8:
+              case 7:
+                winBonus = 27.084;
+                break;
+              case 6:
+              case 5:
+                winBonus = 25.435;
+                break;
+              case 4:
+              case 3:
+                winBonus = 24.257;
+                break;
+              default:
+                winBonus = 23.55;
                 break;
             }
             break;
