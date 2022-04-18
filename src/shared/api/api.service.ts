@@ -8,7 +8,8 @@ import axios, { AxiosResponse } from 'axios-https-proxy-fix';
 import Bottleneck from 'bottleneck';
 import _ from 'lodash';
 import moment from 'moment';
-import { HeroConfigsDto, MarketListingDto, SkinConfigDto } from './dto';
+import { HeroConfigsDto, MarketBuyDto, SkinConfigDto } from './dto';
+import { MarketRentDto } from './dto/market-rent.dto';
 
 const BASE_URL = 'https://data.thetanarena.com/thetan/v1';
 
@@ -19,10 +20,10 @@ export class ApiService {
     private cacheService: CacheService,
   ) {}
 
-  async fetchLatestMarketListings(
+  async fetchLatestMarketBuys(
     laterThan: number,
     limit: number,
-  ): Promise<MarketListingDto[]> {
+  ): Promise<MarketBuyDto[]> {
     const url = `${BASE_URL}/nif/search?tab=heroes&sort=Latest`;
     const PAGE_SIZE = 50;
 
@@ -32,7 +33,38 @@ export class ApiService {
       .page(
         (cursor: number) => `${url}&from=${cursor}&size=${PAGE_SIZE}`,
         (response, cursor: number) => {
-          const results: MarketListingDto[] = response?.data?.data ?? [];
+          const results: MarketBuyDto[] = response?.data?.data ?? [];
+
+          const filteredResults = _.chain(results)
+            .filter((it) => moment(it.lastModified).unix() >= laterThan)
+            .value();
+
+          return {
+            results,
+            done:
+              (!!limit && cursor + PAGE_SIZE >= limit) ||
+              filteredResults.length < PAGE_SIZE,
+            cursor: cursor + PAGE_SIZE,
+          };
+        },
+        0,
+      );
+  }
+
+  async fetchLatestMarketRents(
+    laterThan: number,
+    limit: number,
+  ): Promise<MarketRentDto[]> {
+    const url = `${BASE_URL}/nif/search?type=30&sort=Latest`;
+    const PAGE_SIZE = 50;
+
+    return this.apiBuilder()
+      .limit()
+      .retry()
+      .page(
+        (cursor: number) => `${url}&from=${cursor}&size=${PAGE_SIZE}`,
+        (response, cursor: number) => {
+          const results: MarketRentDto[] = response?.data?.data ?? [];
 
           const filteredResults = _.chain(results)
             .filter((it) => moment(it.lastModified).unix() >= laterThan)

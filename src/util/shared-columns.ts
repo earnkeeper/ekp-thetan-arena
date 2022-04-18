@@ -165,6 +165,14 @@ export const BATTLES_USED_COLUMN = {
   width: '100px',
 };
 
+export const RENT_BATTLES_COLUMN = {
+  id: 'battleCap',
+  title: 'Battles',
+  sortable: true,
+  right: true,
+  width: '100px',
+};
+
 export const TROPHY_COLUMN = {
   id: 'trophyClass',
   format: switchCase('$.trophyClass', TROPHY_MAP),

@@ -2,23 +2,23 @@ import { CurrencyDto } from '@earnkeeper/ekp-sdk';
 import { CacheService, CoingeckoService } from '@earnkeeper/ekp-sdk-nestjs';
 import { Injectable } from '@nestjs/common';
 import _ from 'lodash';
-import { CACHE_MARKET_BUY_DOCUMENTS } from '../../util/constants';
+import { CACHE_MARKET_RENT_DOCUMENTS } from '../../util/constants';
 import { DEFAULT_WIN_RATE_FORM, WinRateForm } from '../../util/forms';
-import { MarketBuyDocument } from './ui/market-buy.document';
+import { MarketRentDocument } from './ui/market-rent.document';
 
 @Injectable()
-export class MarketBuyService {
+export class MarketRentService {
   constructor(
     private cacheService: CacheService,
     private coingeckoService: CoingeckoService,
   ) {}
 
-  async getListingDocuments(
+  async getRentDocuments(
     currency: CurrencyDto,
     form: WinRateForm,
-  ): Promise<MarketBuyDocument[]> {
-    const documents = await this.cacheService.get<MarketBuyDocument[]>(
-      CACHE_MARKET_BUY_DOCUMENTS,
+  ): Promise<MarketRentDocument[]> {
+    const documents = await this.cacheService.get<MarketRentDocument[]>(
+      CACHE_MARKET_RENT_DOCUMENTS,
     );
 
     if (!documents?.length) {
@@ -36,7 +36,7 @@ export class MarketBuyService {
     const profitableOnly =
       form?.profitableOnly ?? DEFAULT_WIN_RATE_FORM.profitableOnly;
 
-    const updatedDocuments: MarketBuyDocument[] = _.chain(documents)
+    const updatedDocuments: MarketRentDocument[] = _.chain(documents)
       .filter((document) => document.battleCap > 0)
       .map((document) => {
         const coinPrice = prices.find((it) => it.coinId === 'thetan-coin');
@@ -170,7 +170,7 @@ export class MarketBuyService {
 
         const roi = profit <= 0 ? 0 : profit / document.price + 1;
 
-        const updatedDocument: MarketBuyDocument = {
+        const updatedDocument: MarketRentDocument = {
           ...document,
           apr: (365 / totalDays) * roi * 100,
           fiatSymbol: currency.symbol,

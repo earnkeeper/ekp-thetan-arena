@@ -1,4 +1,4 @@
-export type MarketListingDto = Readonly<{
+export type MarketBuyDto = Readonly<{
   id: string;
   created: string;
   lastModified: string;

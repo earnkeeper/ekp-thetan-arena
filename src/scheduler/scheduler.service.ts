@@ -4,7 +4,7 @@ import { Injectable } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { Queue } from 'bull';
 import { RedisService } from 'nestjs-redis';
-import { PROCESS_MARKET_BUYS } from '../util';
+import { PROCESS_MARKET_BUYS, PROCESS_MARKET_RENTS } from '../util';
 
 @Injectable()
 export class SchedulerService {
@@ -19,11 +19,13 @@ export class SchedulerService {
     await client.flushdb();
 
     this.addJob(PROCESS_MARKET_BUYS, {}, 5000, PROCESS_MARKET_BUYS);
+    this.addJob(PROCESS_MARKET_RENTS, {}, 5000, PROCESS_MARKET_RENTS);
   }
 
   @Cron('0 * * * * *')
   everyMinute() {
     this.addJob(PROCESS_MARKET_BUYS, {}, 0, PROCESS_MARKET_BUYS);
+    this.addJob(PROCESS_MARKET_RENTS, {}, 0, PROCESS_MARKET_RENTS);
   }
 
   async addJob<T>(jobName: string, data?: T, delay = 0, jobId?: string) {

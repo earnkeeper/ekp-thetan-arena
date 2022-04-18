@@ -1,6 +1,6 @@
 {
   "name": "ekp-thetan-arena",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "EarnKeeper.io plugin for https://thetanarena.com",
   "main": "index.js",
   "scripts": {
