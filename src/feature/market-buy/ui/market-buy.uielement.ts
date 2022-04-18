@@ -13,20 +13,30 @@ import {
   UiElement,
 } from '@earnkeeper/ekp-sdk';
 import {
-  BATTLE_CAP_COLUMN,
+  BATTLES_USED_COLUMN,
+  COST_COLUMN,
   LEVEL_COLUMN,
+  LISTED_COLUMN,
   NAME_COLUMN,
-  PRICE_COLUMN,
+  PROFIT_COLUMN,
+  PROFIT_PER_DAY_COLUMN,
   RARITY_COLUMN,
   ROLE_COLUMN,
   SKIN_COLUMN,
+  TOTAL_DAYS_COLUMN,
   TROPHY_COLUMN,
+  WinRateForm,
 } from '../../../util';
 import { MarketBuyDocument } from './market-buy.document';
 
 export default function element(): UiElement {
   return Container({
-    children: [titleRow(), instructionsRow(), marketRow()],
+    children: [
+      titleRow(),
+      instructionsRow(),
+      WinRateForm(MarketBuyDocument),
+      marketRow(),
+    ],
   });
 }
 
@@ -34,7 +44,7 @@ function instructionsRow() {
   return Span({
     className: 'd-block mt-1 mb-2 font-small-4',
     content:
-      'Search and filter the Thetan Arena marketplace for the heroes with the best ROI. This list updates automatically once every minute and on each sale.',
+      'Browse the Thetan Arena marketplace for the heroes with the best ROI. This list updates automatically once every minute and on each sale.',
   });
 }
 
@@ -65,8 +75,8 @@ function titleRow() {
 
 function marketRow(): UiElement {
   return Datatable({
-    defaultSortFieldId: 'priceFiat',
-    defaultSortAsc: true,
+    defaultSortFieldId: 'profitPerDay',
+    defaultSortAsc: false,
     data: documents(MarketBuyDocument),
     busyWhen: isBusy(collection(MarketBuyDocument)),
     paginationPerPage: 50,
@@ -77,15 +87,18 @@ function marketRow(): UiElement {
       true,
       true,
     ),
-    filters: [{ columnId: 'rarity', type: 'checkbox' }],
     columns: [
       NAME_COLUMN,
+      COST_COLUMN,
+      PROFIT_COLUMN,
+      PROFIT_PER_DAY_COLUMN,
+      TOTAL_DAYS_COLUMN,
+      LISTED_COLUMN,
       LEVEL_COLUMN,
-      BATTLE_CAP_COLUMN,
-      TROPHY_COLUMN,
+      BATTLES_USED_COLUMN,
+      { ...TROPHY_COLUMN, omit: true },
       { ...RARITY_COLUMN, omit: true },
-      ROLE_COLUMN,
-      PRICE_COLUMN,
+      { ...ROLE_COLUMN, omit: true },
       { ...SKIN_COLUMN, omit: true },
     ],
   });

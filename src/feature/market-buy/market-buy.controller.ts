@@ -17,6 +17,7 @@ import { Injectable } from '@nestjs/common';
 import _ from 'lodash';
 import { Mutex } from 'redis-semaphore';
 import { CACHE_MARKET_BUY_VIEWERS } from '../../util';
+import { DEFAULT_WIN_RATE_FORM } from '../../util/forms';
 import { MarketBuyService } from './market-buy.service';
 import { MarketBuyDocument } from './ui/market-buy.document';
 import page from './ui/market-buy.uielement';
@@ -69,9 +70,11 @@ export class MarketBuyController extends AbstractController {
       await this.clientService.emitBusy(event, COLLECTION_NAME);
 
       const currency = event.state.client.selectedCurrency;
+      const form = event.state.forms?.winRate ?? DEFAULT_WIN_RATE_FORM;
 
       const documents = await this.marketplaceService.getListingDocuments(
         currency,
+        form,
       );
 
       if (!documents?.length) {

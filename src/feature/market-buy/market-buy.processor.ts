@@ -11,12 +11,7 @@ import { ethers } from 'ethers';
 import _ from 'lodash';
 import moment from 'moment';
 import { Mutex } from 'redis-semaphore';
-import {
-  ApiService,
-  HeroConfigsDto,
-  MarketListingDto,
-  SkinConfigDto,
-} from '../../shared/api';
+import { ApiService, MarketListingDto } from '../../shared/api';
 import {
   CACHE_MARKET_BUY_DOCUMENTS,
   PROCESS_MARKET_BUYS,
@@ -122,17 +117,13 @@ export class MarketBuyProcessor {
           .value();
       }
 
-      const [newListings, heroConfigs, skinConfigs] = await Promise.all([
+      const [newListings] = await Promise.all([
         this.apiService.fetchLatestMarketListings(fetchUntil, limit),
-        this.apiService.fetchHeroConfigs(),
-        this.apiService.fetchHeroSkinConfigs(),
+        // this.apiService.fetchHeroConfigs(),
+        // this.apiService.fetchHeroSkinConfigs(),
       ]);
 
-      const newDocuments = this.mapMarketDocuments(
-        newListings,
-        heroConfigs,
-        skinConfigs,
-      );
+      const newDocuments = this.mapMarketDocuments(newListings);
 
       const updatedDocuments = _.chain(existingDocuments)
         .unionBy(newDocuments, 'id')
@@ -165,8 +156,6 @@ export class MarketBuyProcessor {
 
   private mapMarketDocuments(
     marketListingDtos: MarketListingDto[],
-    heroConfigDtos: HeroConfigsDto,
-    skinConfigDtos: SkinConfigDto[],
   ): MarketBuyDocument[] {
     const now = moment().unix();
 
@@ -189,9 +178,9 @@ export class MarketBuyProcessor {
 
         let battleColor = 'success';
 
-        if (dto.battleCap / dto.battleCapMax > 0.8) {
+        if (dto.battleCap / dto.battleCapMax < 0.2) {
           battleColor = 'danger';
-        } else if (dto.battleCap / dto.battleCapMax > 0.6) {
+        } else if (dto.battleCap / dto.battleCapMax < 0.4) {
           battleColor = 'warning';
         }
 
@@ -201,7 +190,7 @@ export class MarketBuyProcessor {
           battleCap: dto.battleCap,
           battleCapMax: dto.battleCapMax,
           battleColor,
-          battlesRemaining: dto.battleCapMax - dto.battleCap,
+          battlesUsed: dto.battleCapMax - dto.battleCap,
           created: moment(dto.created).unix(),
           dmg: dto.dmg,
           hp: dto.hp,
@@ -211,6 +200,8 @@ export class MarketBuyProcessor {
           ownerAddress: dto.ownerAddress,
           ownerId: dto.ownerId,
           price,
+          pricePerBattle:
+            dto.battleCap === 0 ? undefined : price / dto.battleCap,
           priceSymbol: dto.systemCurrency.name,
           rarity: dto.heroRarity,
           refId: dto.refId,
