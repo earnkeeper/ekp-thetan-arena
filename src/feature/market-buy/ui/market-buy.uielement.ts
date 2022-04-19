@@ -10,6 +10,7 @@ import {
   navigate,
   Row,
   Span,
+  Table,
   UiElement,
 } from '@earnkeeper/ekp-sdk';
 import {

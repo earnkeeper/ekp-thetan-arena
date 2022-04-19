@@ -27,7 +27,6 @@ export class BoxService {
     const thcPrice = prices.find((it) => it.coinId === 'thetan-coin').price;
     const thgPrice = prices.find((it) => it.coinId === 'thetan-arena').price;
 
-    console.log(thcPrice, thgPrice, thcPrice / thgPrice);
     const boxes = [
       {
         name: 'Common',
