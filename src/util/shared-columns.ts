@@ -269,6 +269,7 @@ export const PROFIT_PER_DAY_COLUMN = {
 
 export const PROFIT_COLUMN = {
   id: 'profitFiat',
+  title: 'Profit',
   cell: profitCell('$.profitFiat', '$.roi'),
   right: true,
   width: '140px',
