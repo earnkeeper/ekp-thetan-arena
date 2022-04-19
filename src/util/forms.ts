@@ -20,7 +20,10 @@ export type WinRateForm = Readonly<{
   profitableOnly: string;
 }>;
 
-export function winRateForm(documentType: any): UiElement {
+export function winRateForm(
+  documentType: any,
+  showProfitableOnly = true,
+): UiElement {
   return Form({
     name: 'winRate',
     schema: {
@@ -47,6 +50,7 @@ export function winRateForm(documentType: any): UiElement {
             ],
           }),
           Col({
+            when: showProfitableOnly,
             className: 'col-12 col-md-auto',
             children: [
               Select({

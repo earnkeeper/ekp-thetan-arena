@@ -23,7 +23,6 @@ import {
   RARITY_COLUMN,
   ROLE_COLUMN,
   SKIN_COLUMN,
-  TOTAL_DAYS_COLUMN,
   TROPHY_COLUMN,
   winRateForm,
 } from '../../../util';
@@ -35,7 +34,7 @@ export default function element(): UiElement {
       titleRow(),
       instructionsRow(),
       winRateForm(MarketBuyDocument),
-      marketRow(),
+      tableRow(),
     ],
   });
 }
@@ -73,9 +72,9 @@ function titleRow() {
   });
 }
 
-function marketRow(): UiElement {
+function tableRow(): UiElement {
   return Datatable({
-    defaultSortFieldId: 'profitPerDay',
+    defaultSortFieldId: 'profitPerDayFiat',
     defaultSortAsc: false,
     data: documents(MarketBuyDocument),
     busyWhen: isBusy(collection(MarketBuyDocument)),
@@ -92,7 +91,6 @@ function marketRow(): UiElement {
       COST_COLUMN,
       PROFIT_COLUMN,
       PROFIT_PER_DAY_COLUMN,
-      TOTAL_DAYS_COLUMN,
       LISTED_COLUMN,
       LEVEL_COLUMN,
       BATTLES_USED_COLUMN,

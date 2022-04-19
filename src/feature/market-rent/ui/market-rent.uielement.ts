@@ -23,7 +23,6 @@ import {
   RENT_BATTLES_COLUMN,
   ROLE_COLUMN,
   SKIN_COLUMN,
-  TOTAL_DAYS_COLUMN,
   TROPHY_COLUMN,
   winRateForm,
 } from '../../../util';
@@ -76,7 +75,7 @@ function titleRow() {
 
 function marketRow(): UiElement {
   return Datatable({
-    defaultSortFieldId: 'profitPerDay',
+    defaultSortFieldId: 'profitPerDayFiat',
     defaultSortAsc: false,
     data: documents(MarketRentDocument),
     busyWhen: isBusy(collection(MarketRentDocument)),
@@ -93,7 +92,6 @@ function marketRow(): UiElement {
       COST_COLUMN,
       PROFIT_COLUMN,
       PROFIT_PER_DAY_COLUMN,
-      TOTAL_DAYS_COLUMN,
       LISTED_COLUMN,
       LEVEL_COLUMN,
       RENT_BATTLES_COLUMN,
@@ -103,6 +101,7 @@ function marketRow(): UiElement {
         format: commify('$.daysCap'),
         right: true,
         width: '100px',
+        omit: true,
       },
       { ...TROPHY_COLUMN, omit: true },
       { ...RARITY_COLUMN, omit: true },

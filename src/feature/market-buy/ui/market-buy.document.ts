@@ -15,7 +15,6 @@ export class MarketBuyDocument extends DocumentDto {
   readonly hp: number;
   readonly lastModified: number;
   readonly level: number;
-  readonly minWinRate?: number;
   readonly name: string;
   readonly ownerAddress: string;
   readonly ownerId: string;

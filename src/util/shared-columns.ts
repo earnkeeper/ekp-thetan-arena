@@ -3,21 +3,28 @@ import {
   Col,
   Div,
   formatAge,
-  formatCurrency,
   formatPercent,
   formatTemplate,
-  Fragment,
   Icon,
   Image,
-  not,
   Row,
-  Rpc,
   Span,
   switchCase,
-  UiElement,
 } from '@earnkeeper/ekp-sdk';
 import { RARITY_MAP, TROPHY_MAP } from './constants';
 import { commify } from './rpc/commify.rpc';
+import {
+  col,
+  fiat,
+  priceCell,
+  profitCell,
+  profitPerDayCell,
+  pubimage,
+  row,
+  span,
+  switchElement,
+  switchRange,
+} from './ui';
 
 export const RARITY_COLUMN = {
   id: 'rarity',
@@ -124,19 +131,6 @@ export const NAME_COLUMN = {
   }),
 };
 
-function ColoredCircle(props: { color: Rpc; size: number }) {
-  return Div({
-    // @ts-ignore
-    style: {
-      backgroundColor: props.color,
-      width: props.size,
-      height: props.size,
-    },
-    className: 'rounded-circle',
-    children: [],
-  });
-}
-
 export const SKIN_COLUMN = {
   id: 'skinName',
   title: 'Skin',
@@ -235,7 +229,7 @@ export const COST_COLUMN = {
   right: true,
   width: '160px',
   sortable: true,
-  cell: thcPriceCell('$.price', '$.priceFiat', '$.profit'),
+  cell: priceCell('$.price', '$.priceFiat', '$.profit'),
 };
 
 export const PRICE_PER_BATTLE_COLUMN = {
@@ -265,49 +259,19 @@ export const PRICE_PER_BATTLE_COLUMN = {
 };
 
 export const PROFIT_PER_DAY_COLUMN = {
-  id: 'profitPerDay',
+  id: 'profitPerDayFiat',
   title: 'Per Day',
   right: true,
-  width: '160px',
+  width: '140px',
   sortable: true,
-  cell: thcPriceCell('$.profitPerDay', '$.profitPerDayFiat', '$.profitPerDay'),
+  cell: profitPerDayCell('$.totalDays', '$.profitPerDayFiat'),
 };
 
-function thcPriceCell(priceRpc: Rpc, fiatPriceRpc: Rpc, colorizeBy?: Rpc) {
-  return row([
-    col(),
-    col('col-auto pr-0', pubimage('thc.png', '16px')),
-    col(
-      'col-auto',
-      span(
-        commify(priceRpc),
-        switchRange(
-          priceRpc,
-          [, 0, 'text-warning float-right font-small-4 font-weight-bold'],
-          [0, , 'text-warning float-right font-small-4 font-weight-bold'],
-        ),
-      ),
-    ),
-    col(
-      'col-12',
-      span(
-        fiat(fiatPriceRpc),
-        colorizeBy
-          ? switchRange(
-              colorizeBy,
-              [, 0, 'text-danger float-right'],
-              [0, , 'text-success float-right'],
-            )
-          : 'float-right',
-      ),
-    ),
-  ]);
-}
 export const PROFIT_COLUMN = {
-  id: 'profit',
-  cell: thcPriceCell('$.profit', '$.profitFiat', '$.profit'),
+  id: 'profitFiat',
+  cell: profitCell('$.profitFiat', '$.roi'),
   right: true,
-  width: '160px',
+  width: '140px',
   sortable: true,
 };
 
@@ -336,15 +300,6 @@ export const ROI_COLUMN = {
   }),
 };
 
-export const TOTAL_DAYS_COLUMN = {
-  id: 'totalDays',
-  title: 'Length',
-  format: formatTemplate('{{ days }} days', { days: '$.totalDays' }),
-  right: true,
-  width: '100px',
-  sortable: true,
-};
-
 export const MIN_WIN_RATE_COLUMN = {
   id: 'breakEvenWinRate',
   title: 'Must Win',
@@ -352,58 +307,3 @@ export const MIN_WIN_RATE_COLUMN = {
   right: true,
   width: '100px',
 };
-
-function switchRange(rpc: Rpc, ...ranges: any): Rpc {
-  return {
-    method: 'switchRange',
-    params: [rpc, ranges],
-  };
-}
-
-function switchElement(condition: Rpc, yes: UiElement, no: UiElement) {
-  return Fragment({
-    children: [
-      Fragment({ when: condition, children: [yes] }),
-      Fragment({ when: not(condition), children: [no] }),
-    ],
-  });
-}
-
-function col(className?: string, children?: UiElement | UiElement[]) {
-  if (!children) {
-    return Col({ children: [] });
-  }
-  if (!Array.isArray(children)) {
-    return col(className, [children]);
-  }
-
-  return Col({
-    className,
-    children,
-  });
-}
-
-function pubimage(name: string, height: string) {
-  return Image({
-    src: `${process.env.PUBLIC_URL}/images/${name}`,
-    height,
-  });
-}
-
-function span(content: Rpc, className?: Rpc) {
-  return Span({ content, className });
-}
-
-function row(children: UiElement[]) {
-  if (!Array.isArray(children)) {
-    return row([children]);
-  }
-
-  return Row({
-    children,
-  });
-}
-
-function fiat(value: Rpc) {
-  return formatCurrency(value, '$.fiatSymbol');
-}
