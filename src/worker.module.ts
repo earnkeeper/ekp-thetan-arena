@@ -2,6 +2,7 @@ import { EkConfigService, SdkModule } from '@earnkeeper/ekp-sdk-nestjs';
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { BoxModule } from './feature/box/box.module';
+import { EmbedModule } from './feature/embed/embed.module';
 import { MarketBuyModule } from './feature/market-buy/market-buy.module';
 import { MarketDetailModule } from './feature/market-detail/market-detail.module';
 import { MarketRentModule } from './feature/market-rent/market-rent.module';
@@ -16,6 +17,7 @@ export const MODULE_DEF = {
     BoxModule,
     QueueModule,
     SdkModule,
+    EmbedModule,
   ],
 };
 

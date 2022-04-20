@@ -40,93 +40,78 @@ export const NAME_COLUMN = {
   cell: Row({
     className: 'p-0',
     children: [
-      Col({
-        className: 'col-auto my-auto',
-        children: [
-          Image({
-            src: formatTemplate(
-              'https://assets.thetanarena.com/skin/avatar/{{ skinId }}.png',
-              { skinId: '$.skinId' },
-            ),
-            height: '38px',
-          }),
-        ],
-      }),
-      Col({
-        className: 'col-auto px-0',
-        children: [
-          Div({
-            // @ts-ignore
-            style: {
-              backgroundColor: switchCase('$.rarity', {
-                0: '#59BFFC',
-                1: '#A523FA',
-                2: '#F5BC30',
-              }),
-              width: 6,
-              height: '100%',
-              marginRight: '0.6rem',
-            },
-            children: [],
-          }),
-        ],
-      }),
-      Col({
-        className: 'col-auto p-0',
-        children: [
-          Row({
-            className: 'm-0',
-            children: [
-              Col({
-                className: 'col-12 p-0 font-small-1',
-                children: [Span({ content: '$.skinName' })],
-              }),
-              Col({
-                className: 'col-12 p-0 font-medium-2 font-weight-bold',
+      col('col-auto my-auto', [
+        Image({
+          src: formatTemplate(
+            'https://assets.thetanarena.com/skin/avatar/{{ skinId }}.png',
+            { skinId: '$.skinId' },
+          ),
+          height: '38px',
+        }),
+      ]),
+      col('col-auto px-0', [
+        Div({
+          // @ts-ignore
+          style: {
+            backgroundColor: switchCase('$.rarity', {
+              0: '#59BFFC',
+              1: '#A523FA',
+              2: '#F5BC30',
+            }),
+            width: 6,
+            height: '100%',
+            marginRight: '0.6rem',
+          },
+          children: [],
+        }),
+      ]),
+      col('col-auto p-0', [
+        Row({
+          className: 'm-0',
+          children: [
+            col('col-12 p-0 font-small-1', [Span({ content: '$.skinName' })]),
+            col('col-12 p-0 font-medium-2 font-weight-bold', [
+              Row({
+                className: 'p-0',
                 children: [
-                  Row({
-                    className: 'p-0',
+                  Col({
+                    className: 'col-auto',
+                    children: [Span({ content: '$.name' })],
+                  }),
+                  Col({
+                    className: 'col-auto pl-0',
                     children: [
-                      Col({
-                        className: 'col-auto',
-                        children: [Span({ content: '$.name' })],
+                      Image({
+                        src: formatTemplate(
+                          `${process.env.PUBLIC_URL}/images/role/{{ role }}.png`,
+                          {
+                            role: '$.role',
+                          },
+                        ),
+                        height: '14px',
                       }),
-                      Col({
-                        className: 'col-auto pl-0',
-                        children: [
-                          Image({
-                            src: formatTemplate(
-                              `${process.env.PUBLIC_URL}/images/role/{{ role }}.png`,
-                              {
-                                role: '$.role',
-                              },
-                            ),
-                            height: '14px',
-                          }),
-                        ],
-                      }),
-                      Col({
-                        className: 'col-auto px-0',
-                        children: [
-                          Image({
-                            src: formatTemplate(
-                              `${process.env.PUBLIC_URL}/images/trophy/{{ trophy }}.png`,
-                              {
-                                trophy: '$.trophyClass',
-                              },
-                            ),
-                            height: '16px',
-                          }),
-                        ],
+                    ],
+                  }),
+                  Col({
+                    className: 'col-auto px-0',
+                    children: [
+                      Image({
+                        src: formatTemplate(
+                          `${process.env.PUBLIC_URL}/images/trophy/{{ trophy }}.png`,
+                          {
+                            trophy: '$.trophyClass',
+                          },
+                        ),
+                        height: '16px',
                       }),
                     ],
                   }),
                 ],
               }),
-            ],
-          }),
-        ],
-      }),
+            ]),
+          ],
+        }),
+      ]),
     ],
   }),
 };
