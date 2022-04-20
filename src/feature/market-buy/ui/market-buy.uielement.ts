@@ -10,7 +10,6 @@ import {
   navigate,
   Row,
   Span,
-  Table,
   UiElement,
 } from '@earnkeeper/ekp-sdk';
 import {
@@ -81,11 +80,11 @@ function tableRow(): UiElement {
     busyWhen: isBusy(collection(MarketBuyDocument)),
     paginationPerPage: 50,
     onRowClicked: navigate(
-      formatTemplate(`https://marketplace.thetanarena.com/item/{{ refId }}`, {
+      formatTemplate(`market-detail/{{ refId }}`, {
         refId: '$.refId',
       }),
-      true,
-      true,
+      false,
+      false,
     ),
     columns: [
       NAME_COLUMN,

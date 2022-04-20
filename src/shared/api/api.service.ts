@@ -8,7 +8,7 @@ import axios, { AxiosResponse } from 'axios-https-proxy-fix';
 import Bottleneck from 'bottleneck';
 import _ from 'lodash';
 import moment from 'moment';
-import { HeroConfigsDto, MarketBuyDto, SkinConfigDto } from './dto';
+import { HeroConfigsDto, HeroDto, MarketBuyDto, SkinConfigDto } from './dto';
 import { MarketRentDto } from './dto/market-rent.dto';
 
 const BASE_URL = 'https://data.thetanarena.com/thetan/v1';
@@ -80,6 +80,15 @@ export class ApiService {
         },
         0,
       );
+  }
+
+  async fetchHero(id: string): Promise<HeroDto> {
+    const url = `${BASE_URL}/hero?id=${id}`;
+
+    return this.apiBuilder()
+      .limit()
+      .retry()
+      .get(url, (response) => response?.data?.data);
   }
 
   async fetchHeroConfigs(): Promise<HeroConfigsDto> {

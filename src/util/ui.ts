@@ -99,7 +99,6 @@ export function row(children: UiElement[]) {
   }
 
   return Row({
-    className: 'm-0',
     children,
   });
 }

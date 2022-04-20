@@ -38,15 +38,14 @@ export class MarketDetailController extends AbstractController {
   }
 
   async onClientStateChanged(event: ClientStateChangedEvent) {
-    console.log(event.state);
-
     if (!event.state.client.path.startsWith(`${PATH}/`)) {
       return;
     }
 
     const heroId = event.state.client.path.replace(`${PATH}/`, '');
+    const currency = event.state.client.selectedCurrency;
 
-    const document = await this.marketDetailService.getHero(heroId);
+    const document = await this.marketDetailService.getHero(currency, heroId);
 
     await this.clientService.emitDocuments(event, COLLECTION_NAME, [document]);
   }

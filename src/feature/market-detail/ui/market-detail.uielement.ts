@@ -1,48 +1,169 @@
 import {
-  Col,
   Container,
+  Datatable,
+  Div,
+  formatPercent,
+  formatTemplate,
   Image,
   path,
   Row,
-  Span,
+  Rpc,
+  switchCase,
   UiElement,
 } from '@earnkeeper/ekp-sdk';
+import { col, fiat, priceCell, row, span } from '../../../util';
+import { commify } from '../../../util/rpc/commify.rpc';
 import { MarketDetailDocument } from './market-detail.document';
 
 export default function element(): UiElement {
   return Container({
-    children: [titleRow(), heroRow()],
+    context: `${path(MarketDetailDocument)}[0]`,
+    children: [heroRow(), row([detailsRow(), profitTableRow()])],
   });
 }
 
 function heroRow() {
-  return Span({
-    className: 'font-medium-1 d-block',
-    content: `${path(MarketDetailDocument)}[0].heroName`,
+  return Row({
+    className: 'mt-2 mb-4',
+    children: [
+      col(
+        'col-12 col-lg-auto mt-2',
+        Image({
+          src: '$.skinImageAvatar',
+          height: '120px',
+        }),
+      ),
+      col('col-auto pr-0 pl-2 mt-2', [
+        Div({
+          // @ts-ignore
+          style: {
+            backgroundColor: switchCase('$.rarity', {
+              0: '#59BFFC',
+              1: '#A523FA',
+              2: '#F5BC30',
+            }),
+            width: 16,
+            height: '100%',
+            marginRight: '0.6rem',
+          },
+          children: [],
+        }),
+      ]),
+      col(
+        'mt-2',
+        row([
+          col('col-12', span('$.skinName', 'font-medium-3 py-0 my-0')),
+          col('col-12', span('$.heroName', 'font-large-1 font-weight-bold')),
+          col('col-12', topPriceCell('$.price', '$.priceFiat')),
+        ]),
+      ),
+    ],
   });
 }
 
-function titleRow() {
-  return Row({
-    className: 'mb-2',
-    children: [
-      Col({
-        className: 'col-auto my-auto',
-        children: [
-          Image({
-            src: '/plugins/heroes.svg',
+function detailsRow() {
+  return col(
+    'col-12 col-lg-6',
+    Datatable({
+      showExport: false,
+      pagination: false,
+      showLastUpdated: false,
+      data: '$.details.*',
+      columns: [
+        { id: 'key', title: '', cell: span('$.key', 'font-small-4') },
+        {
+          id: 'value',
+          title: '',
+          cell: span('$.value', 'font-medium-1 float-right'),
+          right: true,
+        },
+      ],
+    }),
+  );
+}
+
+function profitTableRow() {
+  return col('col-12 col-lg-6', [
+    Datatable({
+      data: '$.profits.*',
+      showExport: false,
+      showLastUpdated: false,
+      pagination: false,
+      columns: [
+        {
+          id: 'winRate',
+          cell: span(
+            formatPercent('$.winRate'),
+            'font-medium-1 font-weight-bold',
+          ),
+          minWidth: '60px',
+        },
+        {
+          id: 'profit',
+          cell: priceCell('$.profit', '$.profitFiat', '$.profitFiat'),
+          right: true,
+          width: '160px',
+        },
+        {
+          id: 'revenue',
+          cell: priceCell('$.revenue', '$.revenueFiat'),
+          right: true,
+          width: '160px',
+        },
+        {
+          id: 'padding',
+          title: '',
+          width: '5px',
+        },
+      ],
+    }),
+  ]);
+}
+
+export function topPriceCell(
+  priceRpc: Rpc,
+  fiatPriceRpc: Rpc,
+  image = 'thc.png',
+) {
+  return row([
+    col('col-auto', [
+      row([
+        col(
+          'col-auto pr-0',
+          Div({
+            // @ts-ignore
+            style: { marginTop: 2 },
+            children: [
+              Image({
+                src: formatTemplate(
+                  `${process.env.PUBLIC_URL}/images/{{ name }}`,
+                  {
+                    name: image,
+                  },
+                ),
+                height: '20px',
+              }),
+            ],
           }),
-        ],
-      }),
-      Col({
-        className: 'col-auto my-auto pl-0',
-        children: [
-          Span({
-            className: 'font-medium-5',
-            content: 'Hero Details',
+        ),
+        col(
+          'col-auto',
+          span(
+            commify(priceRpc),
+            'text-warning font-medium-3 font-weight-bold',
+          ),
+        ),
+      ]),
+      row([
+        col(
+          'col-12',
+          Div({
+            // @ts-ignore
+            style: { marginTop: 6 },
+            children: [span(fiat(fiatPriceRpc), 'font-small-4')],
           }),
-        ],
-      }),
-    ],
-  });
+        ),
+      ]),
+    ]),
+  ]);
 }
