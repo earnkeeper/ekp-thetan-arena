@@ -6,7 +6,7 @@
 
 ### Added
 
-- ✨ Home page embedded metric, hero with the highest profit
+- ✨ Added a metric to the EarnKeeper home page, highest profit hero!
 
 ## [0.1.1] - 2022-04-19
 
