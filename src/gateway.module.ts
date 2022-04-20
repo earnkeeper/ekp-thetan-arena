@@ -1,4 +1,5 @@
 import {
+  CacheService,
   EkConfigModule,
   EkConfigService,
   SCHEDULER_QUEUE,
@@ -6,7 +7,7 @@ import {
   WORKER_QUEUE,
 } from '@earnkeeper/ekp-sdk-nestjs';
 import { BullModule } from '@nestjs/bull';
-import { Module } from '@nestjs/common';
+import { CacheModule, Module } from '@nestjs/common';
 import { ScheduleModule } from '@nestjs/schedule';
 import { RedisModule } from 'nestjs-redis';
 import { ProviderService } from './scheduler/provider.service';
@@ -19,8 +20,9 @@ export const MODULE_DEF = {
     BullModule.registerQueue({ name: WORKER_QUEUE }, { name: SCHEDULER_QUEUE }),
     RedisModule.forRootAsync(EkConfigService.createRedisAsyncOptions()),
     ScheduleModule.forRoot(),
+    CacheModule.registerAsync({ useClass: EkConfigService }),
   ],
-  providers: [SchedulerService, SocketService, ProviderService],
+  providers: [SchedulerService, SocketService, ProviderService, CacheService],
 };
 
 @Module(MODULE_DEF)

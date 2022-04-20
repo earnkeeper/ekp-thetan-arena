@@ -2,6 +2,12 @@
 
 <!-- https://keepachangelog.com/en/1.0.0/ -->
 
+## [0.1.2] - 2022-04-20
+
+### Added
+
+- ✨ Home page embedded metric, hero with the highest profit
+
 ## [0.1.1] - 2022-04-19
 
 ### Added
