@@ -1512,9 +1512,9 @@
     "consola" "^2.15.0"
     "node-fetch" "^2.6.1"
 
-"@rometools/cli-darwin-arm64@0.4.2-next":
-  "integrity" "sha512-wLtyen1nOlkggQdzkTbAaPX9yGeY3rq2tTV9ClKJo7V77RmHZ4bj4OKGOPckO3/Bz+R0Va06pi8f5szifG/UtQ=="
-  "resolved" "https://registry.npmjs.org/@rometools/cli-darwin-arm64/-/cli-darwin-arm64-0.4.2-next.tgz"
+"@rometools/cli-win32-x64@0.4.2-next":
+  "integrity" "sha512-+3apd6W5tuLfbwZE5lzgv77obmUYA2tjCuQcZ4pwer1BoDHKx3vxwzxRjO9XH8CWXDvLyQN3dJGMGEWZBBaUJQ=="
+  "resolved" "https://registry.npmjs.org/@rometools/cli-win32-x64/-/cli-win32-x64-0.4.2-next.tgz"
   "version" "0.4.2-next"
 
 "@sentry/core@6.18.2":
@@ -3928,11 +3928,6 @@
   "integrity" "sha1-FQStJSMVjKpA20onh8sBQRmU6k8="
   "resolved" "https://registry.npmjs.org/fs.realpath/-/fs.realpath-1.0.0.tgz"
   "version" "1.0.0"
-
-"fsevents@^2.3.2", "fsevents@~2.3.2":
-  "integrity" "sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA=="
-  "resolved" "https://registry.npmjs.org/fsevents/-/fsevents-2.3.2.tgz"
-  "version" "2.3.2"
 
 "function-bind@^1.1.1":
   "integrity" "sha512-yIovAzMX49sF8Yl58fSCWJ5svSLuaibPxXQJFLmBObTuCr0Mf1KiPopGM9NiFjiYBCbfaa2Fh6breQ6ANVTI0A=="
