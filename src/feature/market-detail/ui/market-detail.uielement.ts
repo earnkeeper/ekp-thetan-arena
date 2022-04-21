@@ -11,14 +11,21 @@ import {
   switchCase,
   UiElement,
 } from '@earnkeeper/ekp-sdk';
+import { truncate } from 'lodash';
 import { col, fiat, priceCell, row, span } from '../../../util';
 import { commify } from '../../../util/rpc/commify.rpc';
 import { MarketDetailDocument } from './market-detail.document';
 
 export default function element(): UiElement {
   return Container({
-    context: `${path(MarketDetailDocument)}[0]`,
-    children: [heroRow(), row([detailsRow(), profitTableRow()])],
+    context: `${path(MarketDetailDocument)}`,
+    children: [
+      heroRow(), 
+      row([
+        detailsRow(), 
+        profitTableRow()
+        ])
+      ],
   });
 }
 
@@ -70,7 +77,11 @@ function detailsRow() {
       showLastUpdated: false,
       data: '$.details.*',
       columns: [
-        { id: 'key', title: '', cell: span('$.key', 'font-small-4') },
+        { 
+          id: 'key', 
+          title: '', 
+          cell: span('$.key', 'font-small-4') 
+        },
         {
           id: 'value',
           title: '',
@@ -106,7 +117,7 @@ function profitTableRow() {
         },
         {
           id: 'revenue',
-          cell: priceCell('$.revenue', '$.revenueFiat'),
+          cell: priceCell('$.revenue','$.revenueFiat'),
           right: true,
           width: '160px',
         },
@@ -136,7 +147,7 @@ export function topPriceCell(
             children: [
               Image({
                 src: formatTemplate(
-                  `${process.env.PUBLIC_URL}/images/{{ name }}`,
+                  `${process.env.PUBLIC_URL}images/{{ name }}`,
                   {
                     name: image,
                   },

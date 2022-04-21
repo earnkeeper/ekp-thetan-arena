@@ -102,7 +102,7 @@ export class MarketDetailService {
         { key: 'Win Reward', value: rewardPerWin },
       ],
     };
-
+    console.log(document);
     return document;
   }
 }

@@ -46,7 +46,6 @@ export class MarketDetailController extends AbstractController {
     const currency = event.state.client.selectedCurrency;
 
     const document = await this.marketDetailService.getHero(currency, heroId);
-
     await this.clientService.emitDocuments(event, COLLECTION_NAME, [document]);
   }
 
