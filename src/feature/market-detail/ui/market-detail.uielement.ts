@@ -18,7 +18,7 @@ import { MarketDetailDocument } from './market-detail.document';
 
 export default function element(): UiElement {
   return Container({
-    context: `${path(MarketDetailDocument)}`,
+    context: `${path(MarketDetailDocument)}[0]`,
     children: [
       heroRow(), 
       row([
