@@ -21,8 +21,6 @@ export default function element(): UiElement {
     context: `${path(MarketDetailDocument)}[0]`,
     children: [
       heroRow(), 
-      detailsRow(), 
-      profitTableRow(),
       //row([detailsRow(), profitTableRow()])
       ],
   });
