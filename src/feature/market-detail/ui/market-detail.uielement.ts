@@ -19,11 +19,10 @@ import { MarketDetailDocument } from './market-detail.document';
 export default function element(): UiElement {
   return Container({
     context: `${path(MarketDetailDocument)}[0]`,
-    when: '$.details',
     when: '$.profits',
     children: [
       heroRow(), 
-      row([detailsRow(), profitTableRow()])
+      //row([detailsRow(), profitTableRow()])
       ],
   });
 }
