@@ -84,8 +84,8 @@ function marketRow(): UiElement {
       formatTemplate(`market-detail/{{ refId }}`, {
         refId: '$.refId',
       }),
-      false,
       true,
+      false,
     ),
     columns: [
       NAME_COLUMN,
