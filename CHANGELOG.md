@@ -2,6 +2,17 @@
 
 <!-- https://keepachangelog.com/en/1.0.0/ -->
 
+## [0.1.3] - 2022-04-26
+
+### Added
+
+- ✨ View on Marketplace button to Market Detail page for heroes
+
+### Fixed
+
+- 🐛  Old heroes are no longer showing on market detail page
+- 🐛  No longer showing profit for heroes that are not for sale
+
 ## [0.1.2] - 2022-04-20
 
 ### Added

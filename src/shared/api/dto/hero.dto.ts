@@ -75,6 +75,16 @@ export type HeroDto = Readonly<{
     dailyTHCBattleCap: number;
     dailyPPBattleCap: number;
   }>;
+  rentInfo: {
+    rentBattles: number;
+    rentBattlesStart: number;
+    expiredTime: number;
+    earned: { type: number; value: number; decimals: number };
+    cost: { type: number; name: string; value: number; decimals: number };
+    transactionHash: string;
+    winRateTHC: { [key: string]: number };
+    periodHours: number;
+  };
   thcBonus: number;
   dailyTHCBattleConfig: number;
 }>;

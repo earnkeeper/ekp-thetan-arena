@@ -29,26 +29,87 @@ export class MarketDetailService {
 
     const thcPrice = prices.find((it) => it.coinId === 'thetan-coin')?.price;
 
-    let price = undefined;
-    let priceFiat = undefined;
-
-    if (!!dto.sale) {
-      price = Number(
-        ethers.utils.formatUnits(dto.sale.price.value, dto.sale.price.decimals),
-      );
-      priceFiat = price * thcPrice;
-    }
-
     const now = moment().unix();
 
     const battleCap = dto.heroRanking.battleCapTHC;
     const battleCapMax = dto.heroRanking.totalBattleCapTHC;
+
     const battlesPerDay = dto.heroRanking.dailyTHCBattleCap;
 
-    const totalDays = battleCap / battlesPerDay;
+    let price = undefined;
+    let priceFiat = undefined;
+    let rental = false;
+    let battlesForRent = undefined;
+    let rentalPeriodDays = undefined;
+    let daysToFinishBattles = battleCap / battlesPerDay;
+
+    if (!!dto.rentInfo) {
+      rental = true;
+      battlesForRent = dto.rentInfo.rentBattles;
+      rentalPeriodDays = dto.rentInfo.periodHours / 24;
+      daysToFinishBattles = battlesForRent / battlesPerDay;
+      if (!!dto.rentInfo?.cost?.value) {
+        price = Number(
+          ethers.utils.formatUnits(
+            dto.rentInfo.cost.value,
+            dto.rentInfo.cost.decimals,
+          ),
+        );
+        priceFiat = price * thcPrice;
+      }
+    } else {
+      if (!!dto.sale?.price?.value) {
+        price = Number(
+          ethers.utils.formatUnits(
+            dto.sale.price.value,
+            dto.sale.price.decimals,
+          ),
+        );
+        priceFiat = price * thcPrice;
+      }
+    }
 
     const rewardPerWin = dto.thcBonus + 6;
     const rewardPerLoss = 1;
+
+    let details = [
+      {
+        key: 'Hero Battles Remaining',
+        value: `${battleCap} / ${battleCapMax}`,
+      },
+
+      { key: 'Win Reward', value: `${rewardPerWin} THC` },
+      { key: 'Hero Rarity', value: RARITY_MAP[dto.rarity] },
+      { key: 'Skin Rarity', value: RARITY_MAP[dto.skinRarity] },
+    ];
+
+    if (battlesPerDay > 0) {
+      details = [
+        { key: 'Max Battles Per Day', value: `${battlesPerDay} /day` },
+        {
+          key: 'Min Time to Complete Battles',
+          value: `${Math.ceil(daysToFinishBattles)} days`,
+        },
+        ...details,
+      ];
+    } else {
+      details = [
+        { key: 'Max Battles Per Day', value: `No Battles Left` },
+        {
+          key: 'Min Time to Complete Battles',
+          value: `No Battles Left`,
+        },
+        ...details,
+      ];
+    }
+
+    if (rental) {
+      details = [
+        { key: 'Battles for Rent', value: `${battlesForRent} battles` },
+        { key: 'Rental Period', value: `${rentalPeriodDays} days` },
+        ...details,
+      ];
+    }
 
     const document: MarketDetailDocument = {
       id: dto.id,
@@ -62,18 +123,20 @@ export class MarketDetailService {
       skinRarity: dto.skinRarity,
       skinName: dto.skinInfo.name,
       fiatSymbol: currency.symbol,
+      rental,
       skinId: dto.skinId,
       skinImageAvatar: `https://assets.thetanarena.com/${dto.skinInfo.imageAvatar.replace(
         '/avatar/',
         '/full/',
       )}`,
       updated: now,
-      totalDays: Math.ceil(totalDays),
+      totalDays: Math.ceil(daysToFinishBattles),
       rewardPerWin,
       profits: _.range(10, 110, 10).map((winRate) => {
         const revenue =
-          (winRate / 100) * rewardPerWin +
-          ((100 - winRate) / 100) * rewardPerLoss;
+          ((winRate / 100) * rewardPerWin +
+            ((100 - winRate) / 100) * rewardPerLoss) *
+          battleCap;
 
         const revenueFiat = thcPrice * revenue;
 
@@ -91,16 +154,7 @@ export class MarketDetailService {
           roi,
         };
       }),
-      details: [
-        { key: 'Hero Rarity', value: RARITY_MAP[dto.rarity] },
-        { key: 'Skin Rarity', value: RARITY_MAP[dto.skinRarity] },
-        { key: 'Total Battles', value: battleCapMax },
-        { key: 'Used Battles', value: battleCapMax - battleCap },
-        { key: 'Battles Remaining', value: battleCap },
-        { key: 'Battles Per Day', value: battlesPerDay },
-        { key: 'Total Days', value: totalDays },
-        { key: 'Win Reward', value: rewardPerWin },
-      ],
+      details,
     };
     return document;
   }
