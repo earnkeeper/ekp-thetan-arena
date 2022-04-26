@@ -71,7 +71,24 @@ function heroRow() {
         'mt-2',
         row([
           col('col-12', span('$.skinName', 'font-medium-3 py-0 my-0')),
-          col('col-12', span('$.heroName', 'font-large-1 font-weight-bold')),
+          col(
+            'col-12',
+            row([
+              col(
+                'col-auto',
+                span('$.heroName', 'font-large-1 font-weight-bold'),
+              ),
+              col(
+                'col-auto pl-0 my-auto',
+                Div({
+                  when: '$.rental',
+                  children: [
+                    span('(Rental)', 'font-medium-5 font-weight-bold'),
+                  ],
+                }),
+              ),
+            ]),
+          ),
           col('col-12', [
             Div({
               when: '$.price',
@@ -122,7 +139,12 @@ function profitTableRow() {
   return col('col-12 col-lg-6', [
     Div({
       when: '$.price',
-      children: [ProfitDataTable({ showProfit: true })],
+      children: [
+        Div({
+          when: '$.battleCap',
+          children: [ProfitDataTable({ showProfit: true })],
+        }),
+      ],
     }),
     Div({
       when: { not: '$.price' },

@@ -19,6 +19,7 @@ export class MarketDetailDocument extends DocumentDto {
   readonly skinRarity: number;
   readonly skinImageAvatar: string;
   readonly totalDays: number;
+  readonly rental: boolean;
   readonly profits: Readonly<{
     id: number;
     updated: number;
