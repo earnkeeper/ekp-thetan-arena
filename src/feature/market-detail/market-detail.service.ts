@@ -33,15 +33,16 @@ export class MarketDetailService {
 
     const battleCap = dto.heroRanking.battleCapTHC;
     const battleCapMax = dto.heroRanking.totalBattleCapTHC;
+    const battlesRemaining = battleCapMax - battleCap;
 
-    const battlesPerDay = dto.heroRanking.dailyTHCBattleCap;
+    const battlesPerDay = dto.dailyTHCBattleConfig;
 
     let price = undefined;
     let priceFiat = undefined;
     let rental = false;
     let battlesForRent = undefined;
     let rentalPeriodDays = undefined;
-    let daysToFinishBattles = battleCap / battlesPerDay;
+    let daysToFinishBattles = battlesRemaining / battlesPerDay;
 
     if (!!dto.rentInfo) {
       rental = true;
@@ -75,7 +76,7 @@ export class MarketDetailService {
     let details = [
       {
         key: 'Hero Battles Remaining',
-        value: `${battleCap} / ${battleCapMax}`,
+        value: `${battlesRemaining} / ${battleCapMax}`,
       },
 
       { key: 'Win Reward', value: `${rewardPerWin} THC` },
@@ -106,7 +107,7 @@ export class MarketDetailService {
     if (rental) {
       details = [
         { key: 'Battles for Rent', value: `${battlesForRent} battles` },
-        { key: 'Rental Period', value: `${rentalPeriodDays} days` },
+        { key: 'Rental Period', value: `${Math.ceil(rentalPeriodDays)} days` },
         ...details,
       ];
     }
@@ -140,7 +141,7 @@ export class MarketDetailService {
         if (rental) {
           revenue *= battlesForRent;
         } else {
-          revenue *= battleCap;
+          revenue *= battlesRemaining;
         }
 
         const revenueFiat = thcPrice * revenue;
