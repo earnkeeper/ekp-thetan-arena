@@ -81,11 +81,11 @@ function marketRow(): UiElement {
     busyWhen: isBusy(collection(MarketRentDocument)),
     paginationPerPage: 50,
     onRowClicked: navigate(
-        formatTemplate(`market-detail/{{ refId }}`, {
-          refId: '$.refId',
-        }),
+      formatTemplate(`market-detail/{{ refId }}`, {
+        refId: '$.refId',
+      }),
       false,
-      false,
+      true,
     ),
     columns: [
       NAME_COLUMN,

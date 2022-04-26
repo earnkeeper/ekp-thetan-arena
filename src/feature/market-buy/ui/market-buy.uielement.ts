@@ -84,7 +84,7 @@ function tableRow(): UiElement {
         refId: '$.refId',
       }),
       false,
-      false,
+      true,
     ),
     columns: [
       NAME_COLUMN,
