@@ -42,10 +42,13 @@ export class MarketDetailController extends AbstractController {
       return;
     }
 
+    await this.clientService.removeOldLayers(event, COLLECTION_NAME);
+
     const heroId = event.state.client.path.replace(`${PATH}/`, '');
     const currency = event.state.client.selectedCurrency;
 
     const document = await this.marketDetailService.getHero(currency, heroId);
+
     await this.clientService.emitDocuments(event, COLLECTION_NAME, [document]);
   }
 

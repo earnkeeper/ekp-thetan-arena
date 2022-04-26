@@ -1,17 +1,19 @@
 import {
+  Button,
   Container,
   Datatable,
   Div,
   formatPercent,
   formatTemplate,
   Image,
+  navigate,
   path,
   Row,
   Rpc,
+  Span,
   switchCase,
   UiElement,
 } from '@earnkeeper/ekp-sdk';
-import { truncate } from 'lodash';
 import { col, fiat, priceCell, row, span } from '../../../util';
 import { commify } from '../../../util/rpc/commify.rpc';
 import { MarketDetailDocument } from './market-detail.document';
@@ -19,10 +21,22 @@ import { MarketDetailDocument } from './market-detail.document';
 export default function element(): UiElement {
   return Container({
     context: `${path(MarketDetailDocument)}[0]`,
+    when: `$.id`,
     children: [
-      heroRow(), 
-      row([detailsRow(), profitTableRow()])
-      ],
+      heroRow(),
+      Button({
+        className: 'mb-2',
+        label: 'View on Marketplace',
+        onClick: navigate(
+          formatTemplate('https://marketplace.thetanarena.com/item/{{ id }}', {
+            id: '$.id',
+          }),
+          true,
+          true,
+        ),
+      }),
+      row([detailsRow(), profitTableRow()]),
+    ],
   });
 }
 
@@ -58,7 +72,21 @@ function heroRow() {
         row([
           col('col-12', span('$.skinName', 'font-medium-3 py-0 my-0')),
           col('col-12', span('$.heroName', 'font-large-1 font-weight-bold')),
-          col('col-12', topPriceCell('$.price', '$.priceFiat')),
+          col('col-12', [
+            Div({
+              when: '$.price',
+              children: [topPriceCell('$.price', '$.priceFiat')],
+            }),
+            Div({
+              when: { not: '$.price' },
+              children: [
+                Span({
+                  className: 'font-medium-3 mt-1 font-weight-bold text-warning',
+                  content: 'NOT FOR SALE',
+                }),
+              ],
+            }),
+          ]),
         ]),
       ),
     ],
@@ -74,10 +102,10 @@ function detailsRow() {
       showLastUpdated: false,
       data: '$.details.*',
       columns: [
-        { 
-          id: 'key', 
-          title: '', 
-          cell: span('$.key', 'font-small-4') 
+        {
+          id: 'key',
+          title: '',
+          cell: span('$.key', 'font-small-4'),
         },
         {
           id: 'value',
@@ -92,47 +120,58 @@ function detailsRow() {
 
 function profitTableRow() {
   return col('col-12 col-lg-6', [
-    Datatable({
-      data: '$.profits.*',
-      showExport: false,
-      showLastUpdated: false,
-      pagination: false,
-      columns: [
-        {
-          id: 'winRate',
-          cell: span(
-            formatPercent('$.winRate'),
-            'font-medium-1 font-weight-bold',
-          ),
-          minWidth: '60px',
-        },
-        {
-          id: 'profit',
-          cell: priceCell('$.profit', '$.profitFiat', '$.profitFiat'),
-          right: true,
-          width: '160px',
-        },
-        {
-          id: 'revenue',
-          cell: priceCell('$.revenue','$.revenueFiat'),
-          right: true,
-          width: '160px',
-        },
-        {
-          id: 'padding',
-          title: '',
-          width: '5px',
-        },
-      ],
+    Div({
+      when: '$.price',
+      children: [ProfitDataTable({ showProfit: true })],
+    }),
+    Div({
+      when: { not: '$.price' },
+      children: [ProfitDataTable({ showProfit: false })],
     }),
   ]);
+}
+
+function ProfitDataTable({ showProfit }) {
+  return Datatable({
+    data: '$.profits.*',
+    showExport: false,
+    showLastUpdated: false,
+    pagination: false,
+    columns: [
+      {
+        id: 'winRate',
+        cell: span(
+          formatPercent('$.winRate'),
+          'font-medium-1 font-weight-bold',
+        ),
+        minWidth: '60px',
+      },
+      {
+        id: 'profit',
+        cell: priceCell('$.profit', '$.profitFiat', '$.profitFiat'),
+        right: true,
+        width: '160px',
+        omit: !showProfit,
+      },
+      {
+        id: 'revenue',
+        cell: priceCell('$.revenue', '$.revenueFiat'),
+        right: true,
+        width: '160px',
+      },
+      {
+        id: 'padding',
+        title: '',
+        width: '5px',
+      },
+    ],
+  });
 }
 
 export function topPriceCell(
   priceRpc: Rpc,
   fiatPriceRpc: Rpc,
   image = 'thc.png',
-  
 ) {
   return row([
     col('col-auto', [
@@ -145,7 +184,7 @@ export function topPriceCell(
             children: [
               Image({
                 src: formatTemplate(
-                  `${process.env.PUBLIC_URL}images/{{ name }}`,
+                  `${process.env.PUBLIC_URL}/images/{{ name }}`,
                   {
                     name: image,
                   },
