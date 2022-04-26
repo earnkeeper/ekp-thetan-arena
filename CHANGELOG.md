@@ -4,6 +4,10 @@
 
 ## [0.1.3] - 2022-04-26
 
+### Added
+
+- ✨ View on Marketplace button to Market Detail page for heroes
+
 ### Fixed
 
 - 🐛  Old heroes are no longer showing on market detail page

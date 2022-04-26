@@ -22,6 +22,8 @@ export class MarketDetailService {
   ): Promise<MarketDetailDocument> {
     const dto = await this.apiService.fetchHero(heroId);
 
+    console.log(dto);
+
     const prices = await this.coingeckoService.latestPricesOf(
       ['thetan-coin', 'thetan-arena'],
       currency.id,
@@ -31,21 +33,39 @@ export class MarketDetailService {
 
     let price = undefined;
     let priceFiat = undefined;
+    let battleCap = dto.heroRanking.battleCapTHC;
+    let battleCapMax = dto.heroRanking.totalBattleCapTHC;
 
-    if (!!dto.sale) {
+    if (!!dto.sale?.price?.value) {
       price = Number(
         ethers.utils.formatUnits(dto.sale.price.value, dto.sale.price.decimals),
       );
       priceFiat = price * thcPrice;
     }
 
+    if (!!dto.rentInfo) {
+      price = Number(
+        ethers.utils.formatUnits(
+          dto.rentInfo.cost.value,
+          dto.rentInfo.cost.decimals,
+        ),
+      );
+      priceFiat = price * thcPrice;
+      battleCap = dto.rentInfo.rentBattles;
+      battleCapMax = dto.rentInfo.rentBattles;
+    }
+
     const now = moment().unix();
 
-    const battleCap = dto.heroRanking.battleCapTHC;
-    const battleCapMax = dto.heroRanking.totalBattleCapTHC;
     const battlesPerDay = dto.heroRanking.dailyTHCBattleCap;
 
-    const totalDays = battleCap / battlesPerDay;
+    console.log(battlesPerDay);
+
+    let totalDays = battleCap / battlesPerDay;
+
+    if (!!dto.rentInfo) {
+      totalDays = dto.rentInfo.periodHours / 24;
+    }
 
     const rewardPerWin = dto.thcBonus + 6;
     const rewardPerLoss = 1;
@@ -75,7 +95,7 @@ export class MarketDetailService {
           (winRate / 100) * rewardPerWin +
           ((100 - winRate) / 100) * rewardPerLoss;
 
-        const revenueFiat = thcPrice * revenue;
+        const revenueFiat = thcPrice * revenue * battleCap;
 
         const roi = (revenueFiat / priceFiat) * 100;
 
@@ -98,7 +118,7 @@ export class MarketDetailService {
         { key: 'Used Battles', value: battleCapMax - battleCap },
         { key: 'Battles Remaining', value: battleCap },
         { key: 'Battles Per Day', value: battlesPerDay },
-        { key: 'Total Days', value: totalDays },
+        { key: 'Total Days', value: Math.ceil(totalDays) },
         { key: 'Win Reward', value: rewardPerWin },
       ],
     };
