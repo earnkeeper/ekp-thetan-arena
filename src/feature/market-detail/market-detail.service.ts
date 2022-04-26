@@ -92,10 +92,11 @@ export class MarketDetailService {
       rewardPerWin,
       profits: _.range(10, 110, 10).map((winRate) => {
         const revenue =
-          (winRate / 100) * rewardPerWin +
-          ((100 - winRate) / 100) * rewardPerLoss;
+          ((winRate / 100) * rewardPerWin +
+            ((100 - winRate) / 100) * rewardPerLoss) *
+          battleCap;
 
-        const revenueFiat = thcPrice * revenue * battleCap;
+        const revenueFiat = thcPrice * revenue;
 
         const roi = (revenueFiat / priceFiat) * 100;
 
