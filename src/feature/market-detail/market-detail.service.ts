@@ -133,10 +133,15 @@ export class MarketDetailService {
       totalDays: Math.ceil(daysToFinishBattles),
       rewardPerWin,
       profits: _.range(10, 110, 10).map((winRate) => {
-        const revenue =
-          ((winRate / 100) * rewardPerWin +
-            ((100 - winRate) / 100) * rewardPerLoss) *
-          battleCap;
+        let revenue =
+          (winRate / 100) * rewardPerWin +
+          ((100 - winRate) / 100) * rewardPerLoss;
+
+        if (rental) {
+          revenue *= battlesForRent;
+        } else {
+          revenue *= battleCap;
+        }
 
         const revenueFiat = thcPrice * revenue;
 
