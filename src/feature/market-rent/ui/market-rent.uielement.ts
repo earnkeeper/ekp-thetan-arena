@@ -81,11 +81,11 @@ function marketRow(): UiElement {
     busyWhen: isBusy(collection(MarketRentDocument)),
     paginationPerPage: 50,
     onRowClicked: navigate(
-      formatTemplate(`https://marketplace.thetanarena.com/item/{{ refId }}`, {
-        refId: '$.refId',
-      }),
-      true,
-      true,
+        formatTemplate(`market-detail/{{ refId }}`, {
+          refId: '$.refId',
+        }),
+      false,
+      false,
     ),
     columns: [
       NAME_COLUMN,

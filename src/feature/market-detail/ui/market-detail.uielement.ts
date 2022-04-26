@@ -21,7 +21,7 @@ export default function element(): UiElement {
     context: `${path(MarketDetailDocument)}[0]`,
     children: [
       heroRow(), 
-      //row([detailsRow(), profitTableRow()])
+      row([detailsRow(), profitTableRow()])
       ],
   });
 }
@@ -132,6 +132,7 @@ export function topPriceCell(
   priceRpc: Rpc,
   fiatPriceRpc: Rpc,
   image = 'thc.png',
+  
 ) {
   return row([
     col('col-auto', [
