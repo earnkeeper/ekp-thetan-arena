@@ -11,6 +11,7 @@ import { ethers } from 'ethers';
 import _ from 'lodash';
 import moment from 'moment';
 import { Mutex } from 'redis-semaphore';
+import { EmbedController } from '../../feature/embed/embed.controller';
 import { MarketBuyController } from '../../feature/market-buy/market-buy.controller';
 import { MarketBuyDocument } from '../../feature/market-buy/ui/market-buy.document';
 import { MarketRentController } from '../../feature/market-rent/market-rent.controller';
@@ -24,7 +25,6 @@ import {
 } from '../../util';
 import { ApiService, MarketBuyDto } from '../api';
 import { MarketRentDto } from '../api/dto/market-rent.dto';
-import { EmbedController } from '../../feature/embed/embed.controller';
 
 @Processor(SCHEDULER_QUEUE)
 export class MarketProcessor {
@@ -333,8 +333,8 @@ export class MarketProcessor {
           updated: now,
           battleCap: dto.battleCap,
           battleCapMax: dto.battleCapMax,
-          battleColor,
           battlesUsed: dto.battleCapMax - dto.battleCap,
+          battleColor,
           created: moment(dto.created).unix(),
           dmg: dto.dmg,
           hp: dto.hp,

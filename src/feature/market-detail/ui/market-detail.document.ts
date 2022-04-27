@@ -8,6 +8,7 @@ export class MarketDetailDocument extends DocumentDto {
   readonly battleCap: number;
   readonly battleCapMax: number;
   readonly battlesPerDay: number;
+  readonly battlesUsed: number;
   readonly heroName: string;
   readonly price: number;
   readonly priceFiat: number;

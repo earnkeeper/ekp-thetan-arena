@@ -1,5 +1,5 @@
 import { CurrencyDto } from '@earnkeeper/ekp-sdk';
-import { CacheService, CoingeckoService } from '@earnkeeper/ekp-sdk-nestjs';
+import { CoingeckoService } from '@earnkeeper/ekp-sdk-nestjs';
 import { Injectable } from '@nestjs/common';
 import { ethers } from 'ethers';
 import _ from 'lodash';
@@ -11,9 +11,8 @@ import { MarketDetailDocument } from './ui/market-detail.document';
 @Injectable()
 export class MarketDetailService {
   constructor(
-    private cacheService: CacheService,
-    private coingeckoService: CoingeckoService,
     private apiService: ApiService,
+    private coingeckoService: CoingeckoService,
   ) {}
 
   async getHero(
@@ -29,9 +28,10 @@ export class MarketDetailService {
 
     const now = moment().unix();
 
-    const battleCap = dto.heroRanking.battleCapTHC;
+    const battleCap =
+      dto.heroRanking.totalBattleCapTHC - dto.heroRanking.battleCapTHC;
     const battleCapMax = dto.heroRanking.totalBattleCapTHC;
-    const battlesRemaining = battleCapMax - battleCap;
+    const battlesUsed = dto.heroRanking.battleCapTHC;
 
     const battlesPerDay = dto.dailyTHCBattleConfig;
     let price = undefined;
@@ -39,7 +39,7 @@ export class MarketDetailService {
     let rental = false;
     let battlesForRent = undefined;
     let rentalPeriodDays = undefined;
-    let daysToFinishBattles = battlesRemaining / battlesPerDay;
+    let daysToFinishBattles = battleCap / battlesPerDay;
 
     if (!!dto.sale) {
       if (!!dto.sale.price?.value) {
@@ -77,7 +77,7 @@ export class MarketDetailService {
     let details = [
       {
         key: 'Hero Battles Remaining',
-        value: `${battlesRemaining} / ${battleCapMax}`,
+        value: `${battlesUsed} / ${battleCapMax}`,
       },
 
       { key: 'Win Reward', value: `${rewardPerWin} THC` },
@@ -117,6 +117,7 @@ export class MarketDetailService {
       id: dto.id,
       battleCap,
       battleCapMax,
+      battlesUsed,
       battlesPerDay,
       heroName: dto.heroInfo.name,
       price,
@@ -142,7 +143,7 @@ export class MarketDetailService {
         if (rental) {
           revenue *= battlesForRent;
         } else {
-          revenue *= battlesRemaining;
+          revenue *= battleCap;
         }
 
         const revenueFiat = thcPrice * revenue;

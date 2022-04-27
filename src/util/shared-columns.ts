@@ -150,6 +150,15 @@ export const RENT_BATTLES_COLUMN = {
   sortable: true,
   right: true,
   width: '100px',
+  cell: Badge({
+    color: 'success',
+    children: [
+      Span({
+        className: 'font-small-2',
+        content: '$.battleCap',
+      }),
+    ],
+  }),
 };
 
 export const TROPHY_COLUMN = {
