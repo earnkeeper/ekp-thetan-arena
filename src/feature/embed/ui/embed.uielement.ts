@@ -1,5 +1,4 @@
 import {
-  Container,
   Div,
   formatTemplate,
   Image,
@@ -7,16 +6,15 @@ import {
   switchCase,
   UiElement,
 } from '@earnkeeper/ekp-sdk';
-import { col, profitCell, row, span } from '../../../util';
+import { col, profitCell, span } from '../../../util';
 
 export default function element(): UiElement {
-  return Container({
+  return Row({
+    className: 'm-0 px-1',
     context: '$.data[0]',
     children: [
-      row([
-        col('', nameRow()),
-        col('col-auto my-auto p-0', profitCell('$.profitFiat', '$.roi')),
-      ]),
+      col('', nameRow()),
+      col('col-auto my-auto p-0', profitCell('$.profitFiat', '$.roi')),
     ],
   });
 }
@@ -26,7 +24,7 @@ function nameRow() {
     className: 'my-1',
     children: [
       col(
-        'col-auto my-auto',
+        'col-auto my-auto pl-0',
         Image({
           src: formatTemplate(
             'https://assets.thetanarena.com/skin/avatar/{{ skinId }}.png',
@@ -54,10 +52,13 @@ function nameRow() {
       ),
       col(
         'col-auto px-0',
-        row([
-          col('col-12 p-0 font-small-1', span('$.skinName')),
-          col('col-12 p-0 font-medium-2 font-weight-bold', span('$.name')),
-        ]),
+        Row({
+          className: 'mx-0',
+          children: [
+            col('col-12 p-0 font-small-1', span('$.skinName')),
+            col('col-12 p-0 font-medium-2 font-weight-bold', span('$.name')),
+          ],
+        }),
       ),
     ],
   });
