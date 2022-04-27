@@ -11,7 +11,6 @@ import { ethers } from 'ethers';
 import _ from 'lodash';
 import moment from 'moment';
 import { Mutex } from 'redis-semaphore';
-import { EmbedController } from '../../feature/embed/embed.controller';
 import { MarketBuyController } from '../../feature/market-buy/market-buy.controller';
 import { MarketBuyDocument } from '../../feature/market-buy/ui/market-buy.document';
 import { MarketRentController } from '../../feature/market-rent/market-rent.controller';
@@ -22,6 +21,7 @@ import {
   PROCESS_MARKET_BUYS,
   PROCESS_MARKET_RENTS,
   PROCESS_MATCH_LOG,
+  PROCESS_RENT_HERO_LOG,
 } from '../../util';
 import { ApiService, MarketBuyDto } from '../api';
 import { MarketRentDto } from '../api/dto/market-rent.dto';
@@ -34,7 +34,6 @@ export class MarketProcessor {
     private apiService: ApiService,
     private marketBuyController: MarketBuyController,
     private marketRentController: MarketRentController,
-    private embedController: EmbedController,
     limiterService: LimiterService,
   ) {
     this.mutex = limiterService.createMutex('market-buy-processor-mutex');
@@ -48,6 +47,10 @@ export class MarketProcessor {
       const log = job.data;
 
       const tokenId = ethers.BigNumber.from(log.topics[1]).toNumber();
+
+      logger.debug(
+        `Received market match log for token id and transaction hash: ${tokenId} - ${log.transactionHash}`,
+      );
 
       await this.mutex.acquire();
 
@@ -81,13 +84,33 @@ export class MarketProcessor {
           ),
         );
       }
+    } catch (error) {
+      this.apmService.captureError(error);
+      logger.error(error);
+    } finally {
+      await this.mutex.release();
+    }
+  }
+
+  @Process(PROCESS_RENT_HERO_LOG)
+  async processRentHeroLog(job: Job<ethers.providers.Log>) {
+    try {
+      const log = job.data;
+
+      const tokenId = ethers.BigNumber.from(log.topics[3]).toNumber();
+
+      logger.debug(
+        `Received rent hero log for token id and transaction hash: ${tokenId} - ${log.transactionHash}`,
+      );
+
+      await this.mutex.acquire();
 
       const rentDocuments: MarketRentDocument[] = await this.cacheService.get(
         CACHE_MARKET_RENT_DOCUMENTS,
       );
 
       const rentDocumentExists = _.some(
-        buyDocuments,
+        rentDocuments,
         (document) => document.tokenId === tokenId.toString(),
       );
 
