@@ -41,7 +41,17 @@ export class MarketDetailService {
     let rentalPeriodDays = undefined;
     let daysToFinishBattles = battlesRemaining / battlesPerDay;
 
-    if (!!dto.rentInfo) {
+    if (!!dto.sale) {
+      if (!!dto.sale.price?.value) {
+        price = Number(
+          ethers.utils.formatUnits(
+            dto.sale.price.value,
+            dto.sale.price.decimals,
+          ),
+        );
+        priceFiat = price * thcPrice;
+      }
+    } else {
       rental = true;
       battlesForRent = dto.rentInfo.rentBattles;
       rentalPeriodDays = dto.rentInfo.periodHours / 24;
@@ -55,20 +65,9 @@ export class MarketDetailService {
         );
         priceFiat = price * thcPrice;
       }
-    //filter out rented heroes
-    if(dto.rentInfo.expiredTime>0){
-        price =0;
-      }
-      
-    } else {
-      if (!!dto.sale?.price?.value) {
-        price = Number(
-          ethers.utils.formatUnits(
-            dto.sale.price.value,
-            dto.sale.price.decimals,
-          ),
-        );
-        priceFiat = price * thcPrice;
+      //filter out rented heroes
+      if (dto.rentInfo.expiredTime > 0) {
+        price = 0;
       }
     }
 
@@ -139,7 +138,7 @@ export class MarketDetailService {
         let revenue =
           (winRate / 100) * rewardPerWin +
           ((100 - winRate) / 100) * rewardPerLoss;
-          
+
         if (rental) {
           revenue *= battlesForRent;
         } else {
