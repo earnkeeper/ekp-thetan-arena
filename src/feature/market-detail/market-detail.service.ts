@@ -36,23 +36,20 @@ export class MarketDetailService {
     const battlesPerDay = dto.dailyTHCBattleConfig;
     let price = undefined;
     let priceFiat = undefined;
-    let rental = false;
     let battlesForRent = undefined;
     let rentalPeriodDays = undefined;
     let daysToFinishBattles = battleCap / battlesPerDay;
 
-    if (!!dto.sale) {
-      if (!!dto.sale.price?.value) {
-        price = Number(
-          ethers.utils.formatUnits(
-            dto.sale.price.value,
-            dto.sale.price.decimals,
-          ),
-        );
-        priceFiat = price * thcPrice;
-      }
-    } else {
-      rental = true;
+    const rental = !dto.sale || (!dto.sale.price?.value && !!dto.rentInfo);
+
+    if (!rental && !!dto.sale.price?.value) {
+      price = Number(
+        ethers.utils.formatUnits(dto.sale.price.value, dto.sale.price.decimals),
+      );
+      priceFiat = price * thcPrice;
+    }
+
+    if (rental) {
       battlesForRent = dto.rentInfo.rentBattles;
       rentalPeriodDays = dto.rentInfo.periodHours / 24;
       daysToFinishBattles = battlesForRent / battlesPerDay;
