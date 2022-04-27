@@ -213,7 +213,7 @@ export class MarketProcessor {
 
       await Promise.all(
         viewers.map((viewer) =>
-          this.marketBuyController.onClientStateChanged(viewer),
+          this.marketBuyController.processClientState(viewer),
         ),
       );
     } catch (error) {
@@ -296,7 +296,7 @@ export class MarketProcessor {
 
       await Promise.all(
         viewers.map((viewer) =>
-          this.marketRentController.onClientStateChanged(viewer),
+          this.marketRentController.processClientState(viewer),
         ),
       );
     } catch (error) {

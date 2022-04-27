@@ -2,6 +2,7 @@ import { CurrencyDto } from '@earnkeeper/ekp-sdk';
 import { CacheService, CoingeckoService } from '@earnkeeper/ekp-sdk-nestjs';
 import { Injectable } from '@nestjs/common';
 import _ from 'lodash';
+import moment from 'moment';
 import { CACHE_MARKET_RENT_DOCUMENTS } from '../../util/constants';
 import { DEFAULT_WIN_RATE_FORM, WinRateForm } from '../../util/forms';
 import { MarketRentDocument } from './ui/market-rent.document';
@@ -21,6 +22,7 @@ export class MarketRentService {
       CACHE_MARKET_RENT_DOCUMENTS,
     );
 
+    const now = moment().unix();
     if (!documents?.length) {
       return [];
     }
@@ -172,6 +174,7 @@ export class MarketRentService {
 
         const updatedDocument: MarketRentDocument = {
           ...document,
+          updated: now,
           apr: (365 / totalDays) * roi * 100,
           fiatSymbol: currency.symbol,
           minWinRate: Math.ceil(breakEvenWinRate * 100),

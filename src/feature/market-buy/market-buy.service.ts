@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { CurrencyDto } from '@earnkeeper/ekp-sdk';
 import { CacheService, CoingeckoService } from '@earnkeeper/ekp-sdk-nestjs';
 import { Injectable } from '@nestjs/common';
@@ -18,6 +19,8 @@ export class MarketBuyService {
     currency: CurrencyDto,
     form: WinRateForm,
   ): Promise<MarketBuyDocument[]> {
+    const now = moment().unix();
+
     const documents = await this.cacheService.get<MarketBuyDocument[]>(
       CACHE_MARKET_BUY_DOCUMENTS,
     );
@@ -76,6 +79,7 @@ export class MarketBuyService {
 
         const updatedDocument: MarketBuyDocument = {
           ...document,
+          updated: now,
           apr: (365 / totalDays) * roi * 100,
           fiatSymbol: currency.symbol,
           priceFiat: coinPrice.price * document.price,
