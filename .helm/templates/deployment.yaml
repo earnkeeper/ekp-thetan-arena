@@ -27,9 +27,9 @@ spec:
             - name: MONGO_HOST
               value: '{{ .Values.mongodb.host }}'
             - name: MONGO_DB_NAME
-              value: {{ .Chart.Name }}
+              value: {{ .Release.Name }}
             - name: MONGO_USER
-              value: {{ .Chart.Name }}
+              value: {{ .Release.Name }}
             - name: MONGO_PASSWORD
               value: '{{ .Values.mongodb.password }}'
             - name: REDIS_HOST
