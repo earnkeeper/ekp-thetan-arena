@@ -40,7 +40,7 @@ export class ApiService {
             .value();
 
           return {
-            results,
+            results: filteredResults,
             done:
               (!!limit && cursor + PAGE_SIZE >= limit) ||
               filteredResults.length < PAGE_SIZE,
@@ -71,7 +71,7 @@ export class ApiService {
             .value();
 
           return {
-            results,
+            results: filteredResults,
             done:
               (!!limit && cursor + PAGE_SIZE >= limit) ||
               filteredResults.length < PAGE_SIZE,

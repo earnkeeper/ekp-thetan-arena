@@ -180,7 +180,7 @@ export class MarketProcessor {
         .value();
 
       logger.log(
-        'Fetched new market documents, length: ' + newDocuments.length,
+        'Fetched new market buy documents, length: ' + newDocuments.length,
       );
 
       if (!updatedDocuments.length) {
@@ -242,7 +242,7 @@ export class MarketProcessor {
         .value();
 
       logger.log(
-        'Fetched new market documents, length: ' + newDocuments.length,
+        'Fetched new market rent documents, length: ' + newDocuments.length,
       );
 
       if (!updatedDocuments.length) {
