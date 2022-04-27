@@ -21,12 +21,10 @@ export class MarketDetailService {
     heroId: string,
   ): Promise<MarketDetailDocument> {
     const dto = await this.apiService.fetchHero(heroId);
-
     const prices = await this.coingeckoService.latestPricesOf(
       ['thetan-coin', 'thetan-arena'],
       currency.id,
     );
-
     const thcPrice = prices.find((it) => it.coinId === 'thetan-coin')?.price;
 
     const now = moment().unix();
@@ -36,7 +34,6 @@ export class MarketDetailService {
     const battlesRemaining = battleCapMax - battleCap;
 
     const battlesPerDay = dto.dailyTHCBattleConfig;
-
     let price = undefined;
     let priceFiat = undefined;
     let rental = false;
@@ -58,6 +55,11 @@ export class MarketDetailService {
         );
         priceFiat = price * thcPrice;
       }
+    //filter out rented heroes
+    if(dto.rentInfo.expiredTime>0){
+        price =0;
+      }
+      
     } else {
       if (!!dto.sale?.price?.value) {
         price = Number(
@@ -137,7 +139,7 @@ export class MarketDetailService {
         let revenue =
           (winRate / 100) * rewardPerWin +
           ((100 - winRate) / 100) * rewardPerLoss;
-
+          
         if (rental) {
           revenue *= battlesForRent;
         } else {

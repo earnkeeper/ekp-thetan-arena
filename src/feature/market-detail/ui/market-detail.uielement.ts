@@ -99,7 +99,7 @@ function heroRow() {
               children: [
                 Span({
                   className: 'font-medium-3 mt-1 font-weight-bold text-warning',
-                  content: 'NOT FOR SALE',
+                  content: 'NOT AVAILABLE',
                 }),
               ],
             }),
