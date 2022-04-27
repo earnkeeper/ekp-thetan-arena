@@ -17,7 +17,9 @@ import { MarketRentController } from '../../feature/market-rent/market-rent.cont
 import { MarketRentDocument } from '../../feature/market-rent/ui/market-rent.document';
 import {
   CACHE_MARKET_BUY_DOCUMENTS,
+  CACHE_MARKET_BUY_LAST_FULL_UPDATE,
   CACHE_MARKET_RENT_DOCUMENTS,
+  CACHE_MARKET_RENT_LAST_FULL_UPDATE,
   PROCESS_MARKET_BUYS,
   PROCESS_MARKET_RENTS,
   PROCESS_MATCH_LOG,
@@ -152,9 +154,20 @@ export class MarketProcessor {
         ? Number(process.env.MARKET_BUY_FETCH_LIMIT)
         : undefined;
 
-      let existingDocuments = await this.cacheService.get<MarketBuyDocument[]>(
-        CACHE_MARKET_BUY_DOCUMENTS,
-      );
+      const lastFullUpdate =
+        (await this.cacheService.get<number>(
+          CACHE_MARKET_BUY_LAST_FULL_UPDATE,
+        )) ?? 0;
+
+      const doFullUpdate = moment().unix() - lastFullUpdate > 1800;
+
+      let existingDocuments: MarketBuyDocument[];
+
+      if (!doFullUpdate) {
+        existingDocuments = await this.cacheService.get<MarketBuyDocument[]>(
+          CACHE_MARKET_BUY_DOCUMENTS,
+        );
+      }
 
       if (!existingDocuments) {
         existingDocuments = [];
@@ -187,6 +200,13 @@ export class MarketProcessor {
         return;
       }
 
+      if (doFullUpdate) {
+        await this.cacheService.set(
+          CACHE_MARKET_BUY_LAST_FULL_UPDATE,
+          moment().unix(),
+        );
+      }
+
       await this.cacheService.set(CACHE_MARKET_BUY_DOCUMENTS, updatedDocuments);
 
       const viewers = await this.marketBuyController.getViewers();
@@ -213,9 +233,20 @@ export class MarketProcessor {
         ? Number(process.env.MARKET_BUY_FETCH_LIMIT)
         : undefined;
 
-      let existingDocuments: MarketRentDocument[] = await this.cacheService.get(
-        CACHE_MARKET_RENT_DOCUMENTS,
-      );
+      const lastFullUpdate =
+        (await this.cacheService.get<number>(
+          CACHE_MARKET_RENT_LAST_FULL_UPDATE,
+        )) ?? 0;
+
+      const doFullUpdate = moment().unix() - lastFullUpdate > 1800;
+
+      let existingDocuments: MarketRentDocument[];
+
+      if (!doFullUpdate) {
+        existingDocuments = await this.cacheService.get(
+          CACHE_MARKET_RENT_DOCUMENTS,
+        );
+      }
 
       if (!existingDocuments) {
         existingDocuments = [];
@@ -247,6 +278,13 @@ export class MarketProcessor {
 
       if (!updatedDocuments.length) {
         return;
+      }
+
+      if (doFullUpdate) {
+        await this.cacheService.set(
+          CACHE_MARKET_RENT_LAST_FULL_UPDATE,
+          moment().unix(),
+        );
       }
 
       await this.cacheService.set(
