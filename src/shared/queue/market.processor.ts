@@ -24,7 +24,6 @@ import {
 } from '../../util';
 import { ApiService, MarketBuyDto } from '../api';
 import { MarketRentDto } from '../api/dto/market-rent.dto';
-import { EmbedController } from '../../feature/embed/embed.controller';
 
 @Processor(SCHEDULER_QUEUE)
 export class MarketProcessor {
@@ -34,7 +33,6 @@ export class MarketProcessor {
     private apiService: ApiService,
     private marketBuyController: MarketBuyController,
     private marketRentController: MarketRentController,
-    private embedController: EmbedController,
     limiterService: LimiterService,
   ) {
     this.mutex = limiterService.createMutex('market-buy-processor-mutex');
@@ -69,6 +67,9 @@ export class MarketProcessor {
         await this.cacheService.set(
           CACHE_MARKET_BUY_DOCUMENTS,
           updatedDocuments,
+          {
+            ttl: 1800,
+          },
         );
 
         logger.log('Removed token id from market buys: ' + tokenId);
@@ -100,6 +101,9 @@ export class MarketProcessor {
         await this.cacheService.set(
           CACHE_MARKET_RENT_DOCUMENTS,
           updatedDocuments,
+          {
+            ttl: 1800,
+          },
         );
 
         logger.log('Removed token id from market rents: ' + tokenId);
@@ -164,7 +168,13 @@ export class MarketProcessor {
         return;
       }
 
-      await this.cacheService.set(CACHE_MARKET_BUY_DOCUMENTS, updatedDocuments);
+      await this.cacheService.set(
+        CACHE_MARKET_BUY_DOCUMENTS,
+        updatedDocuments,
+        {
+          ttl: 1800,
+        },
+      );
 
       const viewers = await this.marketBuyController.getViewers();
 
@@ -229,6 +239,9 @@ export class MarketProcessor {
       await this.cacheService.set(
         CACHE_MARKET_RENT_DOCUMENTS,
         updatedDocuments,
+        {
+          ttl: 1800,
+        },
       );
 
       const viewers = await this.marketRentController.getViewers();

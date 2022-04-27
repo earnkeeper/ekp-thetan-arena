@@ -28,8 +28,12 @@ export class SchedulerService {
     await client.flushall();
     await client.flushdb();
 
-    await this.cacheService.set(CACHE_MARKET_BUY_DOCUMENTS, marketBuys);
-    await this.cacheService.set(CACHE_MARKET_RENT_DOCUMENTS, marketRents);
+    await this.cacheService.set(CACHE_MARKET_BUY_DOCUMENTS, marketBuys, {
+      ttl: 1800,
+    });
+    await this.cacheService.set(CACHE_MARKET_RENT_DOCUMENTS, marketRents, {
+      ttl: 1800,
+    });
 
     this.addJob(PROCESS_MARKET_BUYS, {}, 5000, PROCESS_MARKET_BUYS);
     this.addJob(PROCESS_MARKET_RENTS, {}, 5000, PROCESS_MARKET_RENTS);
