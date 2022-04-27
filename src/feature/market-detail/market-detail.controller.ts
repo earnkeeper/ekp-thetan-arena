@@ -5,12 +5,7 @@ import {
   collection,
   RpcEvent,
 } from '@earnkeeper/ekp-sdk';
-import {
-  AbstractController,
-  ApmService,
-  CacheService,
-  ClientService,
-} from '@earnkeeper/ekp-sdk-nestjs';
+import { AbstractController, ClientService } from '@earnkeeper/ekp-sdk-nestjs';
 import { Injectable } from '@nestjs/common';
 import { MarketDetailService } from './market-detail.service';
 import { MarketDetailDocument } from './ui/market-detail.document';
@@ -23,8 +18,6 @@ const PATH = 'market-detail';
 export class MarketDetailController extends AbstractController {
   constructor(
     clientService: ClientService,
-    private apmService: ApmService,
-    private cacheService: CacheService,
     private marketDetailService: MarketDetailService,
   ) {
     super(clientService);
@@ -38,7 +31,7 @@ export class MarketDetailController extends AbstractController {
   }
 
   async onClientStateChanged(event: ClientStateChangedEvent) {
-    if (!event.state.client.path.startsWith(`${PATH}/`)) {
+    if (!event.state.client?.path?.startsWith(`${PATH}/`)) {
       return;
     }
 
