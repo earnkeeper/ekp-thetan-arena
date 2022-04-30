@@ -1,0 +1,10 @@
+{
+    "id": "ekp-thetan-arena-profit-calc",
+    "gameId": "thetan-arena",
+    "name": "Profit Calculator",
+    "github": "https://github.com/earnkeeper/ekp-thetan-arena-profit-calc",
+    "image": "/images/market.png",
+    "mainPage": "market-buy",
+    "description": "Open a box? Buy a Hero? Rent a Hero? Which is most profitable?"
+  }
+  

@@ -8,6 +8,7 @@ import { join } from 'path';
 
 const gatewayBootstrap = async () => {
   const app = await NestFactory.create<NestExpressApplication>(GatewayModule);
+  app.enableCors();
   app.useStaticAssets(join(__dirname, '..', 'public'));
   app.enableShutdownHooks();
   await app.listen(3001);
