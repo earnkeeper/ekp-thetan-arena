@@ -1,5 +1,5 @@
 configVersion: 1
-project: thetan-arena
+project: thetan-arena-profit-calc
 ---
 image: app
 dockerfile: Dockerfile
