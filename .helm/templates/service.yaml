@@ -4,7 +4,7 @@ metadata:
   name: {{ .Release.Name }}-service
 spec:
   selector:
-    app: {{ .Release.Name }}-app
+    app: app
   ports:
   - name: http
     port: 3001

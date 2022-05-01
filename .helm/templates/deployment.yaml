@@ -1,11 +1,11 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-app-deploy
+  name: app-deploy
 spec:
   selector:
     matchLabels:
-      app: {{ .Release.Name }}-app
+      app: app
   revisionHistoryLimit: 3
   strategy:
     type: RollingUpdate
@@ -13,10 +13,10 @@ spec:
   template:
     metadata:
       labels:
-        app: {{ .Release.Name }}-app
+        app: app
     spec:
       containers:
-        - name: {{ .Release.Name }}-nodejs
+        - name: nodejs
           image: '{{ .Values.werf.image.app }}'
           workingDir: /app
           env:
@@ -27,9 +27,9 @@ spec:
             - name: MONGO_HOST
               value: '{{ .Values.mongodb.host }}'
             - name: MONGO_DB_NAME
-              value: {{ .Release.Name }}
+              value: '{{ .Values.mongodb.db }}'
             - name: MONGO_USER
-              value: {{ .Release.Name }}
+              value: '{{ .Values.mongodb.user }}'
             - name: MONGO_PASSWORD
               value: '{{ .Values.mongodb.password }}'
             - name: REDIS_HOST
