@@ -1,7 +1,6 @@
 import { CacheService, SCHEDULER_QUEUE } from '@earnkeeper/ekp-sdk-nestjs';
 import { InjectQueue } from '@nestjs/bull';
 import { Injectable } from '@nestjs/common';
-import { Cron } from '@nestjs/schedule';
 import { Queue } from 'bull';
 import { RedisService } from 'nestjs-redis';
 import { PROCESS_MARKET_BUYS, PROCESS_MARKET_RENTS } from '../util';
@@ -31,34 +30,25 @@ export class SchedulerService {
     await this.cacheService.set(CACHE_MARKET_BUY_DOCUMENTS, marketBuys);
     await this.cacheService.set(CACHE_MARKET_RENT_DOCUMENTS, marketRents);
 
-    this.addJob(PROCESS_MARKET_BUYS, {}, 5000, PROCESS_MARKET_BUYS);
-    this.addJob(PROCESS_MARKET_RENTS, {}, 5000, PROCESS_MARKET_RENTS);
-  }
-
-  @Cron('0 * * * * *')
-  everyMinute() {
-    this.addJob(PROCESS_MARKET_BUYS, {}, 0, PROCESS_MARKET_BUYS);
-    this.addJob(PROCESS_MARKET_RENTS, {}, 0, PROCESS_MARKET_RENTS);
-  }
-
-  async addJob<T>(jobName: string, data?: T, delay = 0, jobId?: string) {
-    try {
-      if (!!jobId) {
-        await this.queue.add(jobName, data, {
-          jobId,
-          removeOnComplete: true,
-          removeOnFail: true,
-          delay,
-        });
-      } else {
-        await this.queue.add(jobName, data, {
-          removeOnComplete: true,
-          removeOnFail: true,
-          delay,
-        });
-      }
-    } catch (error) {
-      console.error(error);
-    }
+    this.queue.add(
+      PROCESS_MARKET_BUYS,
+      {},
+      {
+        delay: 0,
+        repeat: { every: 60 * 1000 },
+        removeOnComplete: true,
+        removeOnFail: true,
+      },
+    );
+    this.queue.add(
+      PROCESS_MARKET_RENTS,
+      {},
+      {
+        delay: 0,
+        repeat: { every: 60 * 1000 },
+        removeOnComplete: true,
+        removeOnFail: true,
+      },
+    );
   }
 }

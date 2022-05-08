@@ -31,7 +31,6 @@
   "dependencies": {
     "@earnkeeper/ekp-sdk": "0.2.15",
     "@earnkeeper/ekp-sdk-nestjs": "1.1.12",
-    "@nestjs/schedule": "^1.1.0",
     "axios-https-proxy-fix": "^0.17.1"
   },
   "devDependencies": {

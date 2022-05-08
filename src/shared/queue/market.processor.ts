@@ -39,8 +39,8 @@ export class MarketProcessor {
     limiterService: LimiterService,
   ) {
     this.mutex = limiterService.createMutex('market-buy-processor-mutex', {
-      lockTimeout: 5 * 60 * 1000,
-      acquireTimeout: 5 * 60 * 1000,
+      lockTimeout: 10 * 60 * 1000,
+      acquireTimeout: 10 * 60 * 1000,
     });
   }
 
