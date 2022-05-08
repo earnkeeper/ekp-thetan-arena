@@ -115,10 +115,10 @@ export class ApiService {
     return new ApiBuilder(this.configService, this.cacheService, {
       defaultLimit: {
         id: 'thetan-api',
-        maxConcurrent: 5,
-        reservoir: 5,
-        reservoirRefreshAmount: 5,
-        reservoirRefreshInterval: 1000,
+        maxConcurrent: 1,
+        reservoir: 1,
+        reservoirRefreshAmount: 1,
+        reservoirRefreshInterval: 2000,
       },
     });
   }

@@ -1,5 +1,4 @@
 import {
-  ApmService,
   CacheService,
   LimiterService,
   logger,
@@ -31,7 +30,6 @@ import { MarketRentDto } from '../api/dto/market-rent.dto';
 @Processor(SCHEDULER_QUEUE)
 export class MarketProcessor {
   constructor(
-    private apmService: ApmService,
     private cacheService: CacheService,
     private apiService: ApiService,
     private marketBuyController: MarketBuyController,
@@ -90,8 +88,8 @@ export class MarketProcessor {
         );
       }
     } catch (error) {
-      this.apmService.captureError(error);
       logger.error(error);
+      console.error(error);
     } finally {
       await this.mutex.release();
     }
@@ -141,8 +139,8 @@ export class MarketProcessor {
         );
       }
     } catch (error) {
-      this.apmService.captureError(error);
       logger.error(error);
+      console.error(error);
     } finally {
       await this.mutex.release();
     }
@@ -185,9 +183,10 @@ export class MarketProcessor {
           .value();
       }
 
-      const [newListings] = await Promise.all([
-        this.apiService.fetchLatestMarketBuys(fetchUntil, limit),
-      ]);
+      const newListings = await this.apiService.fetchLatestMarketBuys(
+        fetchUntil,
+        limit,
+      );
 
       const newDocuments = this.mapMarketBuys(newListings);
 
@@ -220,8 +219,8 @@ export class MarketProcessor {
         ),
       );
     } catch (error) {
-      this.apmService.captureError(error);
       logger.error(error);
+      console.error(error);
     } finally {
       await this.mutex.release();
     }
@@ -303,8 +302,8 @@ export class MarketProcessor {
         ),
       );
     } catch (error) {
-      this.apmService.captureError(error);
       logger.error(error);
+      console.error(error);
     } finally {
       await this.mutex.release();
     }
