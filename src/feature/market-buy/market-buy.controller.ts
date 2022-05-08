@@ -1,3 +1,5 @@
+import { CACHE_MARKET_BUY_VIEWERS } from '@/util';
+import { DEFAULT_WIN_RATE_FORM } from '@/util/forms';
 import {
   ClientConnectedEvent,
   ClientDisconnectedEvent,
@@ -16,8 +18,6 @@ import {
 import { Injectable } from '@nestjs/common';
 import _ from 'lodash';
 import { Mutex } from 'redis-semaphore';
-import { CACHE_MARKET_BUY_VIEWERS } from '@/util';
-import { DEFAULT_WIN_RATE_FORM } from '@/util/forms';
 import { MarketBuyService } from './market-buy.service';
 import { MarketBuyDocument } from './ui/market-buy.document';
 import page from './ui/market-buy.uielement';
@@ -55,6 +55,8 @@ export class MarketBuyController extends AbstractController {
   }
 
   async onClientStateChanged(event: ClientStateChangedEvent) {
+    logger.debug(event?.state);
+
     if (PATH !== event?.state?.client?.path) {
       this.removeViewer(event.clientId);
       return;
