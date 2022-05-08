@@ -32,6 +32,8 @@ spec:
               value: {{ .Release.Name }}
             - name: MONGO_PASSWORD
               value: '{{ .Values.mongodb.password }}'
+            - name: REDIS_HOST
+              value: '{{ .Release.Name }}-redis-master'
             - name: BSC_JSON_RPC_PROVIDER
               value: '{{ .Values.bsc.rpc }}'
             - name: NODE_ENV
