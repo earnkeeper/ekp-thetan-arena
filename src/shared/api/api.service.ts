@@ -21,6 +21,16 @@ export class ApiService {
     private cacheService: CacheService,
   ) {}
 
+  private apiBuilder() {
+    return new ApiBuilder(this.configService, this.cacheService, {
+      defaultLimit: {
+        id: 'thetan-api',
+        maxConcurrent: 1,
+        minTime: 1000,
+      },
+    });
+  }
+
   async fetchLatestMarketBuys(
     laterThan: number,
     limit: number,
@@ -110,18 +120,6 @@ export class ApiService {
       .retry()
       .cache(3600)
       .get(url, (response) => response?.data?.data);
-  }
-
-  private apiBuilder() {
-    return new ApiBuilder(this.configService, this.cacheService, {
-      defaultLimit: {
-        id: 'thetan-api',
-        maxConcurrent: 1,
-        reservoir: 1,
-        reservoirRefreshAmount: 1,
-        reservoirRefreshInterval: 2000,
-      },
-    });
   }
 }
 
