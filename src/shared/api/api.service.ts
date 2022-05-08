@@ -4,6 +4,7 @@ import {
   logger,
 } from '@earnkeeper/ekp-sdk-nestjs';
 import { Injectable } from '@nestjs/common';
+import retry, { Options } from 'async-retry';
 import axios, { AxiosResponse } from 'axios-https-proxy-fix';
 import Bottleneck from 'bottleneck';
 import _ from 'lodash';
@@ -29,7 +30,7 @@ export class ApiService {
 
     return this.apiBuilder()
       .limit()
-      .retry()
+      .retry({ retries: 3 })
       .page(
         (cursor: number) => `${url}&from=${cursor}&size=${PAGE_SIZE}`,
         (response, cursor: number) => {
@@ -60,7 +61,7 @@ export class ApiService {
 
     return this.apiBuilder()
       .limit()
-      .retry()
+      .retry({ retries: 3 })
       .page(
         (cursor: number) => `${url}&from=${cursor}&size=${PAGE_SIZE}`,
         (response, cursor: number) => {
@@ -133,6 +134,8 @@ class ApiBuilder {
 
   private limiter: Bottleneck;
   private ttl: number;
+  private enableRetry: boolean;
+  private retryOptions: Options;
 
   proxy() {
     return this;
@@ -161,7 +164,9 @@ class ApiBuilder {
     return this;
   }
 
-  retry() {
+  retry(options?: Options) {
+    this.enableRetry = true;
+    this.retryOptions = options;
     return this;
   }
 
@@ -194,6 +199,16 @@ class ApiBuilder {
 
       return result;
     };
+
+    if (this.enableRetry) {
+      return retry<T>(async () => {
+        if (!!this.limiter) {
+          return this.limiter.schedule(getter, url);
+        }
+
+        return getter(url);
+      }, this.retryOptions);
+    }
 
     if (!!this.limiter) {
       return this.limiter.schedule(getter, url);
