@@ -38,7 +38,10 @@ export class MarketProcessor {
     private marketRentController: MarketRentController,
     limiterService: LimiterService,
   ) {
-    this.mutex = limiterService.createMutex('market-buy-processor-mutex');
+    this.mutex = limiterService.createMutex('market-buy-processor-mutex', {
+      lockTimeout: 5 * 60 * 1000,
+      acquireTimeout: 5 * 60 * 1000,
+    });
   }
 
   private mutex: Mutex;
@@ -147,9 +150,9 @@ export class MarketProcessor {
 
   @Process(PROCESS_MARKET_BUYS)
   async processMarketBuys() {
-    await this.mutex.acquire();
-
     try {
+      await this.mutex.acquire();
+
       const limit = !!process.env.MARKET_BUY_FETCH_LIMIT
         ? Number(process.env.MARKET_BUY_FETCH_LIMIT)
         : undefined;
@@ -226,9 +229,9 @@ export class MarketProcessor {
 
   @Process(PROCESS_MARKET_RENTS)
   async processMarketRents() {
-    await this.mutex.acquire();
-
     try {
+      await this.mutex.acquire();
+
       const limit = !!process.env.MARKET_BUY_FETCH_LIMIT
         ? Number(process.env.MARKET_BUY_FETCH_LIMIT)
         : undefined;
