@@ -55,7 +55,9 @@ export class MarketBuyController extends AbstractController {
   }
 
   async onClientStateChanged(event: ClientStateChangedEvent) {
-    logger.debug(event?.state);
+    logger.log('market buy client state changed');
+
+    return;
 
     if (PATH !== event?.state?.client?.path) {
       this.removeViewer(event.clientId);

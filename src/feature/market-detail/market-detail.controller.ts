@@ -5,7 +5,11 @@ import {
   collection,
   RpcEvent,
 } from '@earnkeeper/ekp-sdk';
-import { AbstractController, ClientService } from '@earnkeeper/ekp-sdk-nestjs';
+import {
+  AbstractController,
+  ClientService,
+  logger,
+} from '@earnkeeper/ekp-sdk-nestjs';
 import { Injectable } from '@nestjs/common';
 import { MarketDetailService } from './market-detail.service';
 import { MarketDetailDocument } from './ui/market-detail.document';
@@ -31,6 +35,10 @@ export class MarketDetailController extends AbstractController {
   }
 
   async onClientStateChanged(event: ClientStateChangedEvent) {
+    logger.log('detail client state changed');
+
+    return;
+
     if (!event.state.client?.path?.startsWith(`${PATH}/`)) {
       return;
     }

@@ -62,7 +62,7 @@ export class MatchLogProcessor {
 
           await Promise.all(
             viewers.map((viewer) =>
-              this.marketBuyController.onClientStateChanged(viewer),
+              this.marketBuyController.processClientState(viewer),
             ),
           );
         }

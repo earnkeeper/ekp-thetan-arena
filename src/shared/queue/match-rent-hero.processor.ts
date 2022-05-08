@@ -62,7 +62,7 @@ export class MatchRentHeroProcessor {
 
           await Promise.all(
             viewers.map((viewer) =>
-              this.marketRentController.onClientStateChanged(viewer),
+              this.marketRentController.processClientState(viewer),
             ),
           );
         }

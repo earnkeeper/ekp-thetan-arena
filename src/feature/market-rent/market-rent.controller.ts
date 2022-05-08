@@ -55,6 +55,10 @@ export class MarketRentController extends AbstractController {
   }
 
   async onClientStateChanged(event: ClientStateChangedEvent) {
+    logger.log('rent client state changed');
+
+    return;
+
     if (PATH !== event?.state?.client?.path) {
       this.removeViewer(event.clientId);
       return;
