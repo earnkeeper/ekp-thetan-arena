@@ -16,8 +16,8 @@ import {
 import { Injectable } from '@nestjs/common';
 import _ from 'lodash';
 import { Mutex } from 'redis-semaphore';
-import { CACHE_MARKET_RENT_VIEWERS } from '../../util';
-import { DEFAULT_WIN_RATE_FORM } from '../../util/forms';
+import { CACHE_MARKET_RENT_VIEWERS } from '@/util';
+import { DEFAULT_WIN_RATE_FORM } from '@/util/forms';
 import { MarketRentService } from './market-rent.service';
 import { MarketRentDocument } from './ui/market-rent.document';
 import page from './ui/market-rent.uielement';

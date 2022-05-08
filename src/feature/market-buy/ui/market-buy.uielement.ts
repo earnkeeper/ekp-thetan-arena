@@ -25,7 +25,7 @@ import {
   SKIN_COLUMN,
   TROPHY_COLUMN,
   winRateForm,
-} from '../../../util';
+} from '@/util';
 import { MarketBuyDocument } from './market-buy.document';
 
 export default function element(): UiElement {

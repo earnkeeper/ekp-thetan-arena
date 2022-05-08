@@ -415,10 +415,10 @@
     "lodash" "^4.17.21"
     "moment" "^2.29.2"
 
-"@earnkeeper/ekp-sdk@0.2.15":
-  "integrity" "sha512-jipoReGupRbFsrvQto28TkZ8lahiGw75dcCOjuq+mJHRxSMw8HTmM2PNDINgR5qXAv70dtJbaJYtaOD64cDsEg=="
-  "resolved" "https://registry.npmjs.org/@earnkeeper/ekp-sdk/-/ekp-sdk-0.2.15.tgz"
-  "version" "0.2.15"
+"@earnkeeper/ekp-sdk@0.2.17":
+  "integrity" "sha512-qq5uNtBqVdOinaEkw/yx/TV//0Fw4/3UTIZlVKHGkLBQj+2AUuyLOJ757QmL/g9EnPgH/bzoBq/ONF5Lg6oFJA=="
+  "resolved" "https://registry.npmjs.org/@earnkeeper/ekp-sdk/-/ekp-sdk-0.2.17.tgz"
+  "version" "0.2.17"
   dependencies:
     "bycontract" "^2.0.11"
     "ethers" "^5.5.4"
@@ -5296,6 +5296,11 @@
   "integrity" "sha512-vVqVZQyf3WLx2Shd0qJ9xuvqgAyKPLAiqITEtqW0oIUjzo3PePDd6fW9iFz30ef7Ysp/oiWqbhszeGWW2T6Gzw=="
   "resolved" "https://registry.npmjs.org/mkdirp/-/mkdirp-1.0.4.tgz"
   "version" "1.0.4"
+
+"module-alias@^2.2.2":
+  "integrity" "sha512-A/78XjoX2EmNvppVWEhM2oGk3x4lLxnkEA4jTbaK97QKSDjkIoOsKQlfylt/d3kKKi596Qy3NP5XrXJ6fZIC9Q=="
+  "resolved" "https://registry.npmjs.org/module-alias/-/module-alias-2.2.2.tgz"
+  "version" "2.2.2"
 
 "moment-timezone@^0.5.31":
   "integrity" "sha512-3zAEHh2hKUs3EXLESx/wsgw6IQdusOT8Bxm3D9UrHPQR7zlMmzwybC8zHEM1tQ4LJwP7fcxrWr8tuBg05fFCbg=="

@@ -1,18 +1,20 @@
-import { CacheService, SCHEDULER_QUEUE } from '@earnkeeper/ekp-sdk-nestjs';
+import { CacheService } from '@earnkeeper/ekp-sdk-nestjs';
 import { InjectQueue } from '@nestjs/bull';
 import { Injectable } from '@nestjs/common';
 import { Queue } from 'bull';
 import { RedisService } from 'nestjs-redis';
-import { PROCESS_MARKET_BUYS, PROCESS_MARKET_RENTS } from '../util';
 import {
   CACHE_MARKET_BUY_DOCUMENTS,
   CACHE_MARKET_RENT_DOCUMENTS,
+  MARKET_BUY_QUEUE,
+  MARKET_RENT_QUEUE,
 } from '../util/constants';
 
 @Injectable()
 export class SchedulerService {
   constructor(
-    @InjectQueue(SCHEDULER_QUEUE) private queue: Queue,
+    @InjectQueue(MARKET_BUY_QUEUE) private marketBuyQueue: Queue,
+    @InjectQueue(MARKET_RENT_QUEUE) private marketRentQueue: Queue,
     private redisService: RedisService,
     private cacheService: CacheService,
   ) {}
@@ -30,8 +32,7 @@ export class SchedulerService {
     await this.cacheService.set(CACHE_MARKET_BUY_DOCUMENTS, marketBuys);
     await this.cacheService.set(CACHE_MARKET_RENT_DOCUMENTS, marketRents);
 
-    this.queue.add(
-      PROCESS_MARKET_BUYS,
+    this.marketBuyQueue.add(
       {},
       {
         delay: 0,
@@ -40,8 +41,7 @@ export class SchedulerService {
         removeOnFail: true,
       },
     );
-    this.queue.add(
-      PROCESS_MARKET_RENTS,
+    this.marketRentQueue.add(
       {},
       {
         delay: 0,

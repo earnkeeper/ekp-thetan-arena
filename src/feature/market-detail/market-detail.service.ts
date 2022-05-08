@@ -4,8 +4,8 @@ import { Injectable } from '@nestjs/common';
 import { ethers } from 'ethers';
 import _ from 'lodash';
 import moment from 'moment';
-import { ApiService } from '../../shared/api/api.service';
-import { RARITY_MAP } from '../../util';
+import { ApiService } from '@/shared/api/api.service';
+import { RARITY_MAP } from '@/util';
 import { MarketDetailDocument } from './ui/market-detail.document';
 
 @Injectable()

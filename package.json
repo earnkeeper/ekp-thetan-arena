@@ -7,31 +7,15 @@
     "prebuild": "rimraf dist",
     "build": "nest build",
     "start": "NODE_ENV=development nest start --watch",
-    "start:prod": "node dist/main",
-    "gen-secret-key": "werf helm secret generate-secret-key > .werf_secret_key",
-    "encrypt-secrets": "werf helm secret values encrypt clear-values.yaml -o .helm/secret-values.yaml",
-    "gh-set-secret-key": "gh secret set WERF_SECRET_KEY --repos=\"earnkeeper/ekp-thetan-arena\" < .werf_secret_key",
-    "gh-set-do-creds": "gh secret set KUBE_CONFIG_BASE64_DATA --repos=\"earnkeeper/ekp-thetan-arena\" -b$(doctl kubernetes cluster kubeconfig show ekp | base64)",
-    "test:e2e": "jest --config ./test/jest-e2e.json --watch",
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "test:cov": "jest --coverage",
-    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/earnkeeper/ekp-thetan-arena.git"
+    "start:prod": "node dist/main"
   },
   "author": "Gavin Shaw",
   "license": "GPL-3.0-or-later",
-  "bugs": {
-    "url": "https://github.com/earnkeeper/ekp-thetan-arena/issues"
-  },
-  "homepage": "https://github.com/earnkeeper/ekp-thetan-arena#readme",
   "dependencies": {
-    "@earnkeeper/ekp-sdk": "0.2.15",
+    "@earnkeeper/ekp-sdk": "0.2.17",
     "@earnkeeper/ekp-sdk-nestjs": "1.1.12",
-    "axios-https-proxy-fix": "^0.17.1"
+    "axios-https-proxy-fix": "^0.17.1",
+    "module-alias": "^2.2.2"
   },
   "devDependencies": {
     "@nestjs/cli": "^8.0.0",
@@ -61,24 +45,7 @@
     "tsconfig-paths": "^3.10.1",
     "typescript": "^4.3.5"
   },
-  "jest": {
-    "moduleFileExtensions": [
-      "js",
-      "json",
-      "ts"
-    ],
-    "rootDir": "src",
-    "testRegex": ".*\\.spec\\.ts$",
-    "transform": {
-      "^.+\\.(t|j)s$": "ts-jest"
-    },
-    "setupFilesAfterEnv": [
-      "jest-extended/all"
-    ],
-    "collectCoverageFrom": [
-      "**/*.(t|j)s"
-    ],
-    "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+  "_moduleAliases": {
+    "@": "dist"
   }
 }

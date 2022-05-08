@@ -1,11 +1,10 @@
-import { SCHEDULER_QUEUE } from '@earnkeeper/ekp-sdk-nestjs';
 import { InjectQueue } from '@nestjs/bull';
 import { Injectable } from '@nestjs/common';
 import { Queue } from 'bull';
 import { ethers } from 'ethers';
 import {
-  PROCESS_MATCH_LOG,
-  PROCESS_RENT_HERO_LOG,
+  MATCH_LOG_QUEUE,
+  RENT_HERO_LOG_QUEUE,
   THETAN_MARKET_ADDRESS,
   THETAN_MATCH_TOPIC,
   THETAN_RENT_HERO_ADDRESS,
@@ -14,7 +13,10 @@ import {
 
 @Injectable()
 export class ProviderService {
-  constructor(@InjectQueue(SCHEDULER_QUEUE) private queue: Queue) {}
+  constructor(
+    @InjectQueue(MATCH_LOG_QUEUE) private matchLogQueue: Queue,
+    @InjectQueue(RENT_HERO_LOG_QUEUE) private rentHeroLogQueue: Queue,
+  ) {}
 
   async onModuleInit() {
     const provider = new ethers.providers.JsonRpcProvider(
@@ -27,7 +29,8 @@ export class ProviderService {
         topics: [THETAN_MATCH_TOPIC],
       },
       (log: ethers.providers.Log) => {
-        this.queue.add(PROCESS_MATCH_LOG, log, {
+        this.matchLogQueue.add(log, {
+          delay: 0,
           removeOnComplete: true,
           removeOnFail: true,
         });
@@ -40,7 +43,7 @@ export class ProviderService {
         topics: [THETAN_RENT_HERO_TOPIC],
       },
       (log: ethers.providers.Log) => {
-        this.queue.add(PROCESS_RENT_HERO_LOG, log, {
+        this.rentHeroLogQueue.add(log, {
           removeOnComplete: true,
           removeOnFail: true,
         });

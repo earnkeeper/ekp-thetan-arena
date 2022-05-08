@@ -20,7 +20,7 @@ import {
   profitPerDayCell,
   row,
   winRateForm,
-} from '../../../util';
+} from '@/util';
 import { BoxDocument } from './box.document';
 
 export default function element(): UiElement {

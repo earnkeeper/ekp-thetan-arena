@@ -16,8 +16,8 @@ import {
 import { Injectable } from '@nestjs/common';
 import _ from 'lodash';
 import { Mutex } from 'redis-semaphore';
-import { CACHE_MARKET_BUY_VIEWERS } from '../../util';
-import { DEFAULT_WIN_RATE_FORM } from '../../util/forms';
+import { CACHE_MARKET_BUY_VIEWERS } from '@/util';
+import { DEFAULT_WIN_RATE_FORM } from '@/util/forms';
 import { BoxService } from './box.service';
 import { BoxDocument } from './ui/box.document';
 import page from './ui/box.uielement';
