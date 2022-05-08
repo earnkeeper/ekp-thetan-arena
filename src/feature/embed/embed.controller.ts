@@ -4,7 +4,11 @@ import {
   ClientStateChangedEvent,
   RpcEvent,
 } from '@earnkeeper/ekp-sdk';
-import { AbstractController, ClientService } from '@earnkeeper/ekp-sdk-nestjs';
+import {
+  AbstractController,
+  ClientService,
+  logger,
+} from '@earnkeeper/ekp-sdk-nestjs';
 import { Injectable } from '@nestjs/common';
 import { EmbedService } from './embed.service';
 import { EmbedDocument } from './ui/embed.document';
@@ -26,6 +30,10 @@ export class EmbedController extends AbstractController {
   }
 
   async onClientStateChanged(event: ClientStateChangedEvent) {
+    logger.log('embed client state changed');
+
+    return;
+
     const currency = event.state.client.selectedCurrency;
 
     const documents = await this.embedService.getEmbedDocuments(currency);
