@@ -35,10 +35,6 @@ export class MarketDetailController extends AbstractController {
   }
 
   async onClientStateChanged(event: ClientStateChangedEvent) {
-    logger.log('detail client state changed');
-
-    return;
-
     if (!event.state.client?.path?.startsWith(`${PATH}/`)) {
       return;
     }

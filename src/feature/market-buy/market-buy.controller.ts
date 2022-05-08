@@ -12,12 +12,10 @@ import {
   ApmService,
   CacheService,
   ClientService,
-  LimiterService,
   logger,
 } from '@earnkeeper/ekp-sdk-nestjs';
 import { Injectable } from '@nestjs/common';
 import _ from 'lodash';
-import { Mutex } from 'redis-semaphore';
 import { MarketBuyService } from './market-buy.service';
 import { MarketBuyDocument } from './ui/market-buy.document';
 import page from './ui/market-buy.uielement';
@@ -27,17 +25,13 @@ const PATH = 'market-buy';
 
 @Injectable()
 export class MarketBuyController extends AbstractController {
-  private viewersMutex: Mutex;
   constructor(
     clientService: ClientService,
-    limiterService: LimiterService,
     private apmService: ApmService,
     private cacheService: CacheService,
     private marketplaceService: MarketBuyService,
   ) {
     super(clientService);
-
-    this.viewersMutex = limiterService.createMutex(CACHE_MARKET_BUY_VIEWERS);
   }
 
   async onClientConnected(event: ClientConnectedEvent) {
@@ -55,10 +49,6 @@ export class MarketBuyController extends AbstractController {
   }
 
   async onClientStateChanged(event: ClientStateChangedEvent) {
-    logger.log('market buy client state changed');
-
-    return;
-
     if (PATH !== event?.state?.client?.path) {
       this.removeViewer(event.clientId);
       return;
@@ -110,25 +100,17 @@ export class MarketBuyController extends AbstractController {
   }
 
   private async addViewer(event: ClientStateChangedEvent) {
-    await this.viewersMutex.acquire();
+    const viewers = await this.getViewers();
 
-    try {
-      const viewers = await this.getViewers();
+    const newViewers = _.chain(viewers)
+      .filter((it) => it.clientId !== event.clientId)
+      .push(event)
+      .value();
 
-      const newViewers = _.chain(viewers)
-        .filter((it) => it.clientId !== event.clientId)
-        .push(event)
-        .value();
-
-      await this.cacheService.set(CACHE_MARKET_BUY_VIEWERS, newViewers);
-    } finally {
-      await this.viewersMutex.release();
-    }
+    await this.cacheService.set(CACHE_MARKET_BUY_VIEWERS, newViewers);
   }
 
   private async removeViewer(clientId: string) {
-    await this.viewersMutex.acquire();
-
     const viewers = await this.getViewers();
 
     const viewerExists = _.some(viewers, (it) => it.clientId === clientId);
@@ -138,7 +120,5 @@ export class MarketBuyController extends AbstractController {
 
       await this.cacheService.set(CACHE_MARKET_BUY_VIEWERS, newViewers);
     }
-
-    await this.viewersMutex.release();
   }
 }
