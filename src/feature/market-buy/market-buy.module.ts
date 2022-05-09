@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ApiModule } from '../../shared/api';
+import { ApiModule } from '@/shared/api';
 import { MarketBuyController } from './market-buy.controller';
 import { MarketBuyService } from './market-buy.service';
 

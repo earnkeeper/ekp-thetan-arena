@@ -5,7 +5,11 @@ import {
   collection,
   RpcEvent,
 } from '@earnkeeper/ekp-sdk';
-import { AbstractController, ClientService } from '@earnkeeper/ekp-sdk-nestjs';
+import {
+  AbstractController,
+  ClientService,
+  logger,
+} from '@earnkeeper/ekp-sdk-nestjs';
 import { Injectable } from '@nestjs/common';
 import { MarketDetailService } from './market-detail.service';
 import { MarketDetailDocument } from './ui/market-detail.document';

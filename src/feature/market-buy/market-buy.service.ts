@@ -3,9 +3,9 @@ import { CurrencyDto } from '@earnkeeper/ekp-sdk';
 import { CacheService, CoingeckoService } from '@earnkeeper/ekp-sdk-nestjs';
 import { Injectable } from '@nestjs/common';
 import _ from 'lodash';
-import { CACHE_MARKET_BUY_DOCUMENTS } from '../../util/constants';
-import { DEFAULT_WIN_RATE_FORM, WinRateForm } from '../../util/forms';
-import { calculateRevenue } from '../../util/revenue';
+import { CACHE_MARKET_BUY_DOCUMENTS } from '@/util/constants';
+import { DEFAULT_WIN_RATE_FORM, WinRateForm } from '@/util/forms';
+import { calculateRevenue } from '@/util/revenue';
 import { MarketBuyDocument } from './ui/market-buy.document';
 
 @Injectable()

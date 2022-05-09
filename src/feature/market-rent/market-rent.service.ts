@@ -3,8 +3,8 @@ import { CacheService, CoingeckoService } from '@earnkeeper/ekp-sdk-nestjs';
 import { Injectable } from '@nestjs/common';
 import _ from 'lodash';
 import moment from 'moment';
-import { CACHE_MARKET_RENT_DOCUMENTS } from '../../util/constants';
-import { DEFAULT_WIN_RATE_FORM, WinRateForm } from '../../util/forms';
+import { CACHE_MARKET_RENT_DOCUMENTS } from '@/util/constants';
+import { DEFAULT_WIN_RATE_FORM, WinRateForm } from '@/util/forms';
 import { MarketRentDocument } from './ui/market-rent.document';
 
 @Injectable()

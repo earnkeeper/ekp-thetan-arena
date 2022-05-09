@@ -6,7 +6,7 @@ import {
   switchCase,
   UiElement,
 } from '@earnkeeper/ekp-sdk';
-import { col, profitCell, span } from '../../../util';
+import { col, profitCell, span } from '@/util';
 
 export default function element(): UiElement {
   return Row({

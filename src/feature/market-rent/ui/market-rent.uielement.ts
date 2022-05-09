@@ -25,8 +25,8 @@ import {
   SKIN_COLUMN,
   TROPHY_COLUMN,
   winRateForm,
-} from '../../../util';
-import { commify } from '../../../util/rpc/commify.rpc';
+} from '@/util';
+import { commify } from '@/util/rpc/commify.rpc';
 import { MarketRentDocument } from './market-rent.document';
 
 export default function element(): UiElement {

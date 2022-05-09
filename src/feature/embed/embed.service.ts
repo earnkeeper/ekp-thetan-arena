@@ -2,7 +2,7 @@ import { CurrencyDto } from '@earnkeeper/ekp-sdk';
 import { CacheService, CoingeckoService } from '@earnkeeper/ekp-sdk-nestjs';
 import { Injectable } from '@nestjs/common';
 import _ from 'lodash';
-import { CACHE_MARKET_BUY_DOCUMENTS, calculateRevenue } from '../../util';
+import { CACHE_MARKET_BUY_DOCUMENTS, calculateRevenue } from '@/util';
 import { MarketBuyDocument } from '../market-buy/ui/market-buy.document';
 import { EmbedDataDocument } from './ui/embed-data.document';
 

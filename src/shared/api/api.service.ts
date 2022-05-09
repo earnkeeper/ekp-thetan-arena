@@ -4,6 +4,7 @@ import {
   logger,
 } from '@earnkeeper/ekp-sdk-nestjs';
 import { Injectable } from '@nestjs/common';
+import retry, { Options } from 'async-retry';
 import axios, { AxiosResponse } from 'axios-https-proxy-fix';
 import Bottleneck from 'bottleneck';
 import _ from 'lodash';
@@ -20,6 +21,16 @@ export class ApiService {
     private cacheService: CacheService,
   ) {}
 
+  private apiBuilder() {
+    return new ApiBuilder(this.configService, this.cacheService, {
+      defaultLimit: {
+        id: 'thetan-api',
+        maxConcurrent: 1,
+        minTime: 1000,
+      },
+    });
+  }
+
   async fetchLatestMarketBuys(
     laterThan: number,
     limit: number,
@@ -29,7 +40,7 @@ export class ApiService {
 
     return this.apiBuilder()
       .limit()
-      .retry()
+      .retry({ retries: 3 })
       .page(
         (cursor: number) => `${url}&from=${cursor}&size=${PAGE_SIZE}`,
         (response, cursor: number) => {
@@ -60,7 +71,7 @@ export class ApiService {
 
     return this.apiBuilder()
       .limit()
-      .retry()
+      .retry({ retries: 3 })
       .page(
         (cursor: number) => `${url}&from=${cursor}&size=${PAGE_SIZE}`,
         (response, cursor: number) => {
@@ -110,18 +121,6 @@ export class ApiService {
       .cache(3600)
       .get(url, (response) => response?.data?.data);
   }
-
-  private apiBuilder() {
-    return new ApiBuilder(this.configService, this.cacheService, {
-      defaultLimit: {
-        id: 'thetan-api',
-        maxConcurrent: 5,
-        reservoir: 5,
-        reservoirRefreshAmount: 5,
-        reservoirRefreshInterval: 1000,
-      },
-    });
-  }
 }
 
 class ApiBuilder {
@@ -133,6 +132,8 @@ class ApiBuilder {
 
   private limiter: Bottleneck;
   private ttl: number;
+  private enableRetry: boolean;
+  private retryOptions: Options;
 
   proxy() {
     return this;
@@ -161,7 +162,9 @@ class ApiBuilder {
     return this;
   }
 
-  retry() {
+  retry(options?: Options) {
+    this.enableRetry = true;
+    this.retryOptions = options;
     return this;
   }
 
@@ -194,6 +197,16 @@ class ApiBuilder {
 
       return result;
     };
+
+    if (this.enableRetry) {
+      return retry<T>(async () => {
+        if (!!this.limiter) {
+          return this.limiter.schedule(getter, url);
+        }
+
+        return getter(url);
+      }, this.retryOptions);
+    }
 
     if (!!this.limiter) {
       return this.limiter.schedule(getter, url);

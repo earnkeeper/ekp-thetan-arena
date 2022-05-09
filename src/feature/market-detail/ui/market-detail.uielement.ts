@@ -1,5 +1,7 @@
+import { col, fiat, priceCell, row, span } from '@/util';
 import {
   Button,
+  commify,
   Container,
   Datatable,
   Div,
@@ -14,8 +16,6 @@ import {
   switchCase,
   UiElement,
 } from '@earnkeeper/ekp-sdk';
-import { col, fiat, priceCell, row, span } from '../../../util';
-import { commify } from '../../../util/rpc/commify.rpc';
 import { MarketDetailDocument } from './market-detail.document';
 
 export default function element(): UiElement {

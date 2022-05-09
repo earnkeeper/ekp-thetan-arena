@@ -1,3 +1,5 @@
+import { CACHE_MARKET_RENT_VIEWERS } from '@/util';
+import { DEFAULT_WIN_RATE_FORM } from '@/util/forms';
 import {
   ClientConnectedEvent,
   ClientDisconnectedEvent,
@@ -10,14 +12,10 @@ import {
   ApmService,
   CacheService,
   ClientService,
-  LimiterService,
   logger,
 } from '@earnkeeper/ekp-sdk-nestjs';
 import { Injectable } from '@nestjs/common';
 import _ from 'lodash';
-import { Mutex } from 'redis-semaphore';
-import { CACHE_MARKET_RENT_VIEWERS } from '../../util';
-import { DEFAULT_WIN_RATE_FORM } from '../../util/forms';
 import { MarketRentService } from './market-rent.service';
 import { MarketRentDocument } from './ui/market-rent.document';
 import page from './ui/market-rent.uielement';
@@ -27,17 +25,13 @@ const PATH = 'market-rent';
 
 @Injectable()
 export class MarketRentController extends AbstractController {
-  private viewersMutex: Mutex;
   constructor(
     clientService: ClientService,
-    limiterService: LimiterService,
     private apmService: ApmService,
     private cacheService: CacheService,
     private marketplaceService: MarketRentService,
   ) {
     super(clientService);
-
-    this.viewersMutex = limiterService.createMutex(CACHE_MARKET_RENT_VIEWERS);
   }
 
   async onClientConnected(event: ClientConnectedEvent) {
@@ -106,25 +100,17 @@ export class MarketRentController extends AbstractController {
   }
 
   private async addViewer(event: ClientStateChangedEvent) {
-    await this.viewersMutex.acquire();
+    const viewers = await this.getViewers();
 
-    try {
-      const viewers = await this.getViewers();
+    const newViewers = _.chain(viewers)
+      .filter((it) => it.clientId !== event.clientId)
+      .push(event)
+      .value();
 
-      const newViewers = _.chain(viewers)
-        .filter((it) => it.clientId !== event.clientId)
-        .push(event)
-        .value();
-
-      await this.cacheService.set(CACHE_MARKET_RENT_VIEWERS, newViewers);
-    } finally {
-      await this.viewersMutex.release();
-    }
+    await this.cacheService.set(CACHE_MARKET_RENT_VIEWERS, newViewers);
   }
 
   private async removeViewer(clientId: string) {
-    await this.viewersMutex.acquire();
-
     const viewers = await this.getViewers();
 
     const viewerExists = _.some(viewers, (it) => it.clientId === clientId);
@@ -134,7 +120,5 @@ export class MarketRentController extends AbstractController {
 
       await this.cacheService.set(CACHE_MARKET_RENT_VIEWERS, newViewers);
     }
-
-    await this.viewersMutex.release();
   }
 }

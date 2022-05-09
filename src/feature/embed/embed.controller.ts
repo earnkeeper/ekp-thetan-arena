@@ -38,7 +38,6 @@ export class EmbedController extends AbstractController {
       page: 'market-buy',
     };
 
-    // @ts-ignore
     await this.clientService.emitDocuments(event, COLLECTION_NAME, [embed]);
   }
 
@@ -46,5 +45,7 @@ export class EmbedController extends AbstractController {
     // Do nothing
   }
 
-  async onClientDisconnected(event: ClientDisconnectedEvent) {}
+  async onClientDisconnected(event: ClientDisconnectedEvent) {
+    // Do nothing
+  }
 }
