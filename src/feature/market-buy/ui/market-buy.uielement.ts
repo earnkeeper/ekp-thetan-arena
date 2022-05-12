@@ -1,18 +1,4 @@
 import {
-  Col,
-  collection,
-  Container,
-  Datatable,
-  documents,
-  formatTemplate,
-  Image,
-  isBusy,
-  navigate,
-  Row,
-  Span,
-  UiElement,
-} from '@earnkeeper/ekp-sdk';
-import {
   BATTLES_USED_COLUMN,
   COST_COLUMN,
   LEVEL_COLUMN,
@@ -26,6 +12,20 @@ import {
   TROPHY_COLUMN,
   winRateForm,
 } from '@/util';
+import {
+  Col,
+  collection,
+  Container,
+  Datatable,
+  documents,
+  formatTemplate,
+  Image,
+  isBusy,
+  navigate,
+  Row,
+  Span,
+  UiElement,
+} from '@earnkeeper/ekp-sdk';
 import { MarketBuyDocument } from './market-buy.document';
 
 export default function element(): UiElement {
@@ -98,6 +98,20 @@ function tableRow(): UiElement {
       { ...RARITY_COLUMN, omit: true },
       { ...ROLE_COLUMN, omit: true },
       { ...SKIN_COLUMN, omit: true },
+      {
+        id: 'refId',
+        searchable: true,
+        omit: true,
+      },
+      {
+        id: 'marketurl',
+        value: formatTemplate(
+          'https://marketplace.thetanarena.com/item/{{ refId }}',
+          { refId: '$.refId' },
+        ),
+        searchable: true,
+        omit: true,
+      },
     ],
   });
 }

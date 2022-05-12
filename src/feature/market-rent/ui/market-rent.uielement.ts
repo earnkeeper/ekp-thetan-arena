@@ -1,18 +1,4 @@
 import {
-  Col,
-  collection,
-  Container,
-  Datatable,
-  documents,
-  formatTemplate,
-  Image,
-  isBusy,
-  navigate,
-  Row,
-  Span,
-  UiElement,
-} from '@earnkeeper/ekp-sdk';
-import {
   COST_COLUMN,
   LEVEL_COLUMN,
   LISTED_COLUMN,
@@ -27,6 +13,20 @@ import {
   winRateForm,
 } from '@/util';
 import { commify } from '@/util/rpc/commify.rpc';
+import {
+  Col,
+  collection,
+  Container,
+  Datatable,
+  documents,
+  formatTemplate,
+  Image,
+  isBusy,
+  navigate,
+  Row,
+  Span,
+  UiElement,
+} from '@earnkeeper/ekp-sdk';
 import { MarketRentDocument } from './market-rent.document';
 
 export default function element(): UiElement {
@@ -107,6 +107,20 @@ function marketRow(): UiElement {
       { ...RARITY_COLUMN, omit: true },
       { ...ROLE_COLUMN, omit: true },
       { ...SKIN_COLUMN, omit: true },
+      {
+        id: 'refId',
+        searchable: true,
+        omit: true,
+      },
+      {
+        id: 'marketurl',
+        value: formatTemplate(
+          'https://marketplace.thetanarena.com/item/{{ refId }}',
+          { refId: '$.refId' },
+        ),
+        searchable: true,
+        omit: true,
+      },
     ],
   });
 }

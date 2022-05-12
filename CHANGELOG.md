@@ -2,11 +2,17 @@
 
 <!-- https://keepachangelog.com/en/1.0.0/ -->
 
+## [0.2.1] - 2022-05-12
+
+### Added
+
+- ✨ You can now search the market by thetan arena id and market url
+
 ## [0.1.4] - 2022-04-27
 
 ### Fix
 
-- ✨ Already purchased or rented heroes showing as available for purchase / rent
+- 🐛 Already purchased or rented heroes showing as available for purchase / rent
 
 ## [0.1.3] - 2022-04-26
 
