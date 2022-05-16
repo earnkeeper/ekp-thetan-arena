@@ -1,0 +1,316 @@
+
+// *** EMBED ***
+
+EmbedController
+	-clientService: ClientService
+	-embedService: EmbedService
+	+onClientStateChanged()
+	+onClientConnected()
+	+onClientDisconnected()
+
+EmbedService
+	-cacheService: CacheService
+	-coingeckoService:CoingeckoService
+	+getBoxDocuments()
+
+EmbedDataDocument
+	-name: string
+
+EmbedDocument
+	-element: UiElement
+	-size: string
+	-data: DocumentDto
+	-page: string
+
+EmbedUI
+	+element()
+
+EmbedUI --> EmbedDocument
+
+EmbedController --> EmbedDocument
+EmbedController --> EmbedService
+EmbedService --> EmbedDocument
+EmbedService --> EmbedDataDocument
+EmbedController --> EmbedUI
+
+// *** BOX ***
+
+BoxController
+	-clientService: ClientService
+	-limiterService: LimiterService
+	- apmService: ApmService
+	- clientService: ClientService
+	- cacheService: CacheService
+	- marketplaceService: BoxService
+	+onClientStateChanged()
+	+onClientConnected()
+	+onClientDisconnected()
+	+getViewers()
+	+addViewer()
+	+removerViewer()
+	+processClientState()
+
+BoxService
+	-coingeckoService: CoingeckoService
+	+getDocuments()
+
+BoxUI
+	+element()
+
+BoxDocument
+	-cost: int
+	-costFiat: int
+	-costImageUrl: string
+	-costSymbol: string
+	-fiatSymbol: string
+	-imageUrl: string
+	-maxDays: number
+	-maxProfitFiat: number
+	-maxProfitPerDayFiat: number
+	-minDays: number
+	-minProfitFiat: number
+	-minProfitPerDayFiat: number
+	-name: string
+	-rarity: number
+	-minRoi: number
+	-maxRoi: number
+
+BoxController --> BoxDocument
+BoxController --> BoxService
+BoxService -->BoxDocument
+BoxController --> BoxUI
+BoxUI-->BoxDocument
+
+// *** MARKET BUY ***
+
+MarketBuyController
+	+onClientStateChanged()
+	+onClientConnected()
+	+onClientDisconnected()
+	+addViewer()
+	+removerViewer()
+	+processStateChanged()
+
+MarketBuyService
+	-cacheService: CacheService
+	-coingeckoService: CoingeckoService
+	+getListingDocuments()
+
+MarketBuyUI
+	+element()
+
+MarketBuyDocument
+	-apr: number
+	-battleCap: number
+	-battleCapMax: number
+	-battlesUsed: number
+	-battleColor: string
+	-created: number
+	-dmg: number
+	-fiatSymbol: string
+	-hp: number
+	-lastModified: number
+	-level: number
+	-name: string
+	-ownerAddress: string
+	-ownerId: string
+	-price: number
+	-priceFiat: number
+	-priceFiatPerBattle: number
+	-pricePerBattle: number
+	-priceSymbol: string
+	-profit: number
+	-profitFiat: number
+	-profitPerDay: number
+	-profitPerDayFiat: number
+	-rarity: number
+	-refId: string
+	-revenue: number
+	-roi: number
+	-role: number
+	-skinId: number
+	-skinName: string
+	-statusId: number
+	-tokenId: string
+	-totalDays: number
+	-trophyClass: number
+	-type: number
+
+MarketBuyController --> MarketBuyDocument
+MarketBuyController --> MarketBuyService
+MarketBuyService --> MarketBuyDocument
+MarketBuyController --> MarketBuyUI
+MarketBuyUI--> MarketBuyDocument
+
+// *** MARKET RENT ***
+
+MarketRentController
+	+onClientStateChanged()
+	+onClientConnected()
+	+onClientDisconnected()
+	+addViewer()
+	+removerViewer()
+	+processStateChanged()
+
+MarketRentService
+	-cacheService: CacheService
+	-coingeckoService: CoingeckoService
+	+getRentDocuments()
+
+MarketRentDocument
+	-apr: number
+	-battleCap: number
+	-daysCap: number
+	-created: number
+	-dmg: number
+	-fiatSymbol: string
+	-hp: number
+	-lastModified: number
+	-level: number
+	-minWinRate: number
+	-name: string
+	-ownerAddress: string
+	-ownerId: string
+	-price: number
+	-priceFiat: number
+	-priceFiatPerBattle: number
+	-pricePerBattle: number
+	-priceSymbol: string
+	-profit: number
+	-profitFiat: number
+	-profitPerDay: number
+	-profitPerDayFiat: number
+	-rarity: number
+	-refId: string
+	-readonly revenue: number
+	-roi: number
+	-role: number
+	-skinId: number
+	-skinName: string
+	-statusId: number
+	-tokenId: string
+	-totalDays: number
+	-trophyClass: number
+	-type: number
+
+MarketRentUI
+	+element()
+
+MarketRentController --> MarketRentDocument
+MarketRentController --> MarketRentService
+MarketRentService --> MarketRentDocument
+MarketRentController --> MarketRentUI
+MarketRentUI --> MarketRentDocument
+
+// *** MARKET DETAIL ***
+
+MarketDetailController
+	-clientService: ClientService
+	-marketDetailService: MarketDetailService
+	+onClientStateChanged()
+	+onClientConnected()
+	+onClientDisconnected()
+	+getHero()
+
+MarketDetailService
+	-cacheService: CacheService
+	-coingeckoService: CoingeckoService
+	+getHero()
+
+MarketDetailUI
+	+element()
+
+MarketDetailDocument
+	-battleCap: number
+	-battleCapMax: number
+	-battlesPerDay: number
+	-battlesUsed: number
+	-heroName: string
+	-price: number
+	-priceFiat: number
+	-rarity: number
+	-rewardPerWin: number
+	-skinId: number
+	-fiatSymbol: string
+	-skinName: string
+	-skinRarity: number
+	-skinImageAvatar: string
+	-totalDays: number
+	-rental: boolean
+	-profits: object
+	-details: object
+
+MarketDetailController --> MarketDetailDocument
+MarketDetailController --> MarketDetailService
+MarketDetailService --> MarketDetailDocument
+MarketDetailService --> ApiService
+MarketDetailController --> MarketDetailUI
+MarketDetailUI --> MarketDetailDocument
+
+// *** PROCESSOR ***
+
+MarketBuyProcessor
+	-apiService: ApiService
+	-cacheService: CacheService
+	-marketBuyController: MarketBuyController
+	+runBuilder()
+	+process()
+	+mapMarketBuys()
+
+MarketBuyProcessor --> ApiService
+
+MarketRentProcessor
+	-apiService: ApiService
+	-cacheService: CacheService
+	-marketRentController: MarketRentController
+	+runBuilder()
+	+process()
+	+mapMarketBuys()
+	+mapMarketRents()
+
+MatchLogProcessor
+	-cacheService: CacheService
+	-marketBuyController: MarketBuyController
+	+runBuilder()
+	+process()
+
+MatchRentHeroProcessor
+	-cacheService: CacheService
+	-marketRentController: MarketRentController
+	+runBuilder()
+	+process()
+
+MarketRentProcessor --> ApiService
+
+// *** SCHEDULE AND QUEUE ***
+
+SchedulerService
+	-marketBuyQueue: Queue
+	-marketRentQueue: Queue
+	-redisService: RedisService
+	-cacheService: CacheService
+	+onModuleInit()
+
+QueueEventsService
+	-Job
+	+onQueueActive()
+	+onQueueWaiting()
+	+onQueueError()
+	+onQueueCompleted()
+
+ProviderService
+	-matchLogQueue: Queue
+	-rentHeroLogQueue: Queue
+	+onModuleInit()
+
+// *** API ***
+
+ApiService
+	-configService: EkConfigService
+	-cacheService: CacheService
+	+fetchLatestMarketBuys()
+	+fetchLatestMarketRents()
+	+fetchHero()
+	+fetchHeroConfigs()
+	+fetchHeroSkinConfigs()
+	+apiBuilder()
