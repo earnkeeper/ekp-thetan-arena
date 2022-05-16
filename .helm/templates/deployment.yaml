@@ -19,6 +19,9 @@ spec:
         - name: nodejs
           image: '{{ .Values.werf.image.app }}'
           workingDir: /app
+          resources:
+            limits:
+              cpu: "0.25"
           env:
             - name: EKP_PLUGIN_ID
               value: {{ .Chart.Name }}
