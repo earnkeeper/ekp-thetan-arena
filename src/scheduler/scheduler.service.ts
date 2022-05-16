@@ -36,7 +36,7 @@ export class SchedulerService {
       {},
       {
         delay: 0,
-        repeat: { every: 60 * 1000 },
+        repeat: { every: 10 * 60 * 1000 },
         removeOnComplete: true,
         removeOnFail: true,
       },
@@ -45,7 +45,7 @@ export class SchedulerService {
       {},
       {
         delay: 0,
-        repeat: { every: 60 * 1000 },
+        repeat: { every: 10 * 60 * 1000 },
         removeOnComplete: true,
         removeOnFail: true,
       },
