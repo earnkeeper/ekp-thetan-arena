@@ -20,6 +20,7 @@ export class SchedulerService {
   ) {}
 
   async onModuleInit() {
+    return
     const marketBuys = await this.cacheService.get(CACHE_MARKET_BUY_DOCUMENTS);
     const marketRents = await this.cacheService.get(
       CACHE_MARKET_RENT_DOCUMENTS,

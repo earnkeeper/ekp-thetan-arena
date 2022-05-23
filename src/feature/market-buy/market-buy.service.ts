@@ -21,24 +21,31 @@ export class MarketBuyService {
   ): Promise<MarketBuyDocument[]> {
     const now = moment().unix();
 
+    console.time('get from cache');
+
     const documents = await this.cacheService.get<MarketBuyDocument[]>(
       CACHE_MARKET_BUY_DOCUMENTS,
     );
+    console.timeEnd('get from cache');
 
     if (!documents?.length) {
       return [];
     }
 
+    console.time('get thetan price');
     const prices = await this.coingeckoService.latestPricesOf(
       ['thetan-coin'],
       currency.id,
     );
+    console.timeEnd('get thetan price');
 
     const expectedWinRate = Number(
       (form?.winRate ?? DEFAULT_WIN_RATE_FORM.winRate).replace(' %', ''),
     );
     const profitableOnly =
       form?.profitableOnly ?? DEFAULT_WIN_RATE_FORM.profitableOnly;
+
+    console.time(`map ${documents.length} documents`);
 
     const updatedDocuments: MarketBuyDocument[] = _.chain(documents)
       .filter((document) => document.battleCap > 0)
@@ -97,7 +104,7 @@ export class MarketBuyService {
       })
       .filter((document) => profitableOnly !== 'Yes' || document.profit > 0)
       .value();
-
+    console.timeEnd(`map ${documents.length} documents`);
     return updatedDocuments;
   }
 }
