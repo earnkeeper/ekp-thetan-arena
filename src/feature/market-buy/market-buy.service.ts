@@ -7,11 +7,12 @@ import { CACHE_MARKET_BUY_DOCUMENTS } from '@/util/constants';
 import { DEFAULT_WIN_RATE_FORM, WinRateForm } from '@/util/forms';
 import { calculateRevenue } from '@/util/revenue';
 import { MarketBuyDocument } from './ui/market-buy.document';
+import { HeroListingRepository } from '@/shared/db';
 
 @Injectable()
 export class MarketBuyService {
   constructor(
-    private cacheService: CacheService,
+    private heroListingRepository: HeroListingRepository,
     private coingeckoService: CoingeckoService,
   ) {}
 
@@ -23,9 +24,8 @@ export class MarketBuyService {
 
     console.time('get from cache');
 
-    const documents = await this.cacheService.get<MarketBuyDocument[]>(
-      CACHE_MARKET_BUY_DOCUMENTS,
-    );
+    const documents = await this.heroListingRepository.findAll();
+
     console.timeEnd('get from cache');
 
     if (!documents?.length) {
@@ -85,8 +85,32 @@ export class MarketBuyService {
         const roi = profit <= 0 ? 0 : profit / document.price + 1;
 
         const updatedDocument: MarketBuyDocument = {
-          ...document,
-          updated: now,
+          id: document.id,
+          updated: document.updated,
+          battleCap: document.battleCap,
+          battleCapMax: document.battleCapMax,
+          battlesUsed: document.battlesUsed,
+          battleColor: document.battleColor,
+          created: document.created,
+          dmg: document.dmg,
+          hp: document.hp,
+          lastModified: document.lastModified,
+          level: document.level,
+          name: document.name,
+          ownerAddress: document.ownerAddress,
+          ownerId: document.ownerId,
+          price: document.price,
+          pricePerBattle: document.pricePerBattle,
+          priceSymbol: document.priceSymbol,
+          rarity: document.rarity,
+          refId: document.refId,
+          role: document.role,
+          skinId: document.skinId,
+          skinName: document.skinName,
+          statusId: document.statusId,
+          tokenId: document.tokenId,
+          trophyClass: document.trophyClass,
+          type: document.type,
           apr: (365 / totalDays) * roi * 100,
           fiatSymbol: currency.symbol,
           priceFiat: coinPrice.price * document.price,

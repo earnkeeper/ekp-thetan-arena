@@ -1,22 +1,21 @@
+import { HeroListingRepository } from '@/shared/db';
+import { calculateRevenue } from '@/util';
 import { CurrencyDto } from '@earnkeeper/ekp-sdk';
-import { CacheService, CoingeckoService } from '@earnkeeper/ekp-sdk-nestjs';
+import { CoingeckoService } from '@earnkeeper/ekp-sdk-nestjs';
 import { Injectable } from '@nestjs/common';
 import _ from 'lodash';
-import { CACHE_MARKET_BUY_DOCUMENTS, calculateRevenue } from '@/util';
 import { MarketBuyDocument } from '../market-buy/ui/market-buy.document';
 import { EmbedDataDocument } from './ui/embed-data.document';
 
 @Injectable()
 export class EmbedService {
   constructor(
-    private cacheService: CacheService,
+    private heroListingRepository: HeroListingRepository,
     private coingeckoService: CoingeckoService,
   ) {}
 
   async getEmbedDocuments(currency: CurrencyDto): Promise<EmbedDataDocument[]> {
-    const documents: MarketBuyDocument[] = await this.cacheService.get(
-      CACHE_MARKET_BUY_DOCUMENTS,
-    );
+    const documents = await this.heroListingRepository.findAll();
 
     const prices = await this.coingeckoService.latestPricesOf(
       ['thetan-coin'],
@@ -63,7 +62,32 @@ export class EmbedService {
         const roi = profit <= 0 ? 0 : profit / document.price + 1;
 
         const updatedDocument: MarketBuyDocument = {
-          ...document,
+          id: document.id,
+          updated: document.updated,
+          battleCap: document.battleCap,
+          battleCapMax: document.battleCapMax,
+          battlesUsed: document.battlesUsed,
+          battleColor: document.battleColor,
+          created: document.created,
+          dmg: document.dmg,
+          hp: document.hp,
+          lastModified: document.lastModified,
+          level: document.level,
+          name: document.name,
+          ownerAddress: document.ownerAddress,
+          ownerId: document.ownerId,
+          price: document.price,
+          pricePerBattle: document.pricePerBattle,
+          priceSymbol: document.priceSymbol,
+          rarity: document.rarity,
+          refId: document.refId,
+          role: document.role,
+          skinId: document.skinId,
+          skinName: document.skinName,
+          statusId: document.statusId,
+          tokenId: document.tokenId,
+          trophyClass: document.trophyClass,
+          type: document.type,
           apr: (365 / totalDays) * roi * 100,
           fiatSymbol: currency.symbol,
           priceFiat: coinPrice.price * document.price,

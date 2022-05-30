@@ -37,9 +37,9 @@ export class MarketBuyController extends AbstractController {
   async onClientConnected(event: ClientConnectedEvent) {
     await this.clientService.emitMenu(event, {
       id: PATH,
-      title: 'Buy Heroes',
+      title: 'Heroes',
       navLink: PATH,
-      icon: 'box',
+      icon: 'shopping-bag',
     });
 
     await this.clientService.emitPage(event, {

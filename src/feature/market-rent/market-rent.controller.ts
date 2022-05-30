@@ -37,9 +37,9 @@ export class MarketRentController extends AbstractController {
   async onClientConnected(event: ClientConnectedEvent) {
     await this.clientService.emitMenu(event, {
       id: PATH,
-      title: 'Rent Heroes',
+      title: 'Rentals',
       navLink: PATH,
-      icon: 'box',
+      icon: 'shopping-bag',
     });
 
     await this.clientService.emitPage(event, {
