@@ -19,9 +19,6 @@ spec:
         - name: nodejs
           image: '{{ .Values.werf.image.app }}'
           workingDir: /app
-          resources:
-            limits:
-              cpu: "0.25"
           env:
             - name: MONGO_URI
               value: '{{ .Values.mongodb.uri }}'
