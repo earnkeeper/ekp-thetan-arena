@@ -23,6 +23,8 @@ spec:
             limits:
               cpu: "0.25"
           env:
+            - name: MONGO_URI
+              value: '{{ .Values.mongodb.uri }}'
             - name: EKP_PLUGIN_ID
               value: {{ .Chart.Name }}
             - name: EKP_PLUGIN_NAME
