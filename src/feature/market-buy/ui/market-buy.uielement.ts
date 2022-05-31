@@ -43,7 +43,7 @@ function instructionsRow() {
   return Span({
     className: 'd-block mt-1 mb-2 font-small-4',
     content:
-      'Browse the Thetan Arena marketplace for the heroes with the best profit. This list updates automatically once every minute and on each sale.',
+      'Browse the Thetan Arena marketplace for the heroes with the best profit.',
   });
 }
 
@@ -64,7 +64,7 @@ function titleRow() {
         children: [
           Span({
             className: 'font-medium-5',
-            content: 'Buy Heroes',
+            content: 'Heroes',
           }),
         ],
       }),

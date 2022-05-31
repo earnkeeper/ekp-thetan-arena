@@ -7,11 +7,12 @@ import { CACHE_MARKET_BUY_DOCUMENTS } from '@/util/constants';
 import { DEFAULT_WIN_RATE_FORM, WinRateForm } from '@/util/forms';
 import { calculateRevenue } from '@/util/revenue';
 import { MarketBuyDocument } from './ui/market-buy.document';
+import { HeroListingRepository } from '@/shared/db';
 
 @Injectable()
 export class MarketBuyService {
   constructor(
-    private cacheService: CacheService,
+    private heroListingRepository: HeroListingRepository,
     private coingeckoService: CoingeckoService,
   ) {}
 
@@ -21,24 +22,30 @@ export class MarketBuyService {
   ): Promise<MarketBuyDocument[]> {
     const now = moment().unix();
 
-    const documents = await this.cacheService.get<MarketBuyDocument[]>(
-      CACHE_MARKET_BUY_DOCUMENTS,
-    );
+    console.time('get from cache');
+
+    const documents = await this.heroListingRepository.findAll();
+
+    console.timeEnd('get from cache');
 
     if (!documents?.length) {
       return [];
     }
 
+    console.time('get thetan price');
     const prices = await this.coingeckoService.latestPricesOf(
       ['thetan-coin'],
       currency.id,
     );
+    console.timeEnd('get thetan price');
 
     const expectedWinRate = Number(
       (form?.winRate ?? DEFAULT_WIN_RATE_FORM.winRate).replace(' %', ''),
     );
     const profitableOnly =
       form?.profitableOnly ?? DEFAULT_WIN_RATE_FORM.profitableOnly;
+
+    console.time(`map ${documents.length} documents`);
 
     const updatedDocuments: MarketBuyDocument[] = _.chain(documents)
       .filter((document) => document.battleCap > 0)
@@ -78,9 +85,33 @@ export class MarketBuyService {
         const roi = profit <= 0 ? 0 : profit / document.price + 1;
 
         const updatedDocument: MarketBuyDocument = {
-          ...document,
-          updated: now,
+          id: document.id,
+          battleCap: document.battleCap,
+          battleCapMax: document.battleCapMax,
+          battlesUsed: document.battlesUsed,
+          battleColor: document.battleColor,
+          created: document.created,
+          dmg: document.dmg,
+          hp: document.hp,
+          lastModified: document.lastModified,
+          level: document.level,
+          name: document.name,
+          ownerAddress: document.ownerAddress,
+          ownerId: document.ownerId,
+          price: document.price,
+          pricePerBattle: document.pricePerBattle,
+          priceSymbol: document.priceSymbol,
+          rarity: document.rarity,
+          refId: document.refId,
+          role: document.role,
+          skinId: document.skinId,
+          skinName: document.skinName,
+          statusId: document.statusId,
+          tokenId: document.tokenId,
+          trophyClass: document.trophyClass,
+          type: document.type,
           apr: (365 / totalDays) * roi * 100,
+          updated: now,
           fiatSymbol: currency.symbol,
           priceFiat: coinPrice.price * document.price,
           priceFiatPerBattle: coinPrice.price * document.pricePerBattle,
@@ -97,7 +128,7 @@ export class MarketBuyService {
       })
       .filter((document) => profitableOnly !== 'Yes' || document.profit > 0)
       .value();
-
+    console.timeEnd(`map ${documents.length} documents`);
     return updatedDocuments;
   }
 }

@@ -1,16 +1,16 @@
+import { DEFAULT_WIN_RATE_FORM, WinRateForm } from '@/util/forms';
 import { CurrencyDto } from '@earnkeeper/ekp-sdk';
-import { CacheService, CoingeckoService } from '@earnkeeper/ekp-sdk-nestjs';
+import { CoingeckoService } from '@earnkeeper/ekp-sdk-nestjs';
 import { Injectable } from '@nestjs/common';
 import _ from 'lodash';
 import moment from 'moment';
-import { CACHE_MARKET_RENT_DOCUMENTS } from '@/util/constants';
-import { DEFAULT_WIN_RATE_FORM, WinRateForm } from '@/util/forms';
+import { RentalListingRepository } from '../../shared/db/rental-listing/rental-listing.repository';
 import { MarketRentDocument } from './ui/market-rent.document';
 
 @Injectable()
 export class MarketRentService {
   constructor(
-    private cacheService: CacheService,
+    private rentalListingRepository: RentalListingRepository,
     private coingeckoService: CoingeckoService,
   ) {}
 
@@ -18,11 +18,10 @@ export class MarketRentService {
     currency: CurrencyDto,
     form: WinRateForm,
   ): Promise<MarketRentDocument[]> {
-    const documents = await this.cacheService.get<MarketRentDocument[]>(
-      CACHE_MARKET_RENT_DOCUMENTS,
-    );
+    const documents = await this.rentalListingRepository.findAll();
 
     const now = moment().unix();
+
     if (!documents?.length) {
       return [];
     }
@@ -173,7 +172,29 @@ export class MarketRentService {
         const roi = profit <= 0 ? 0 : profit / document.price + 1;
 
         const updatedDocument: MarketRentDocument = {
-          ...document,
+          id: document.id,
+          battleCap: document.battleCap,
+          daysCap: document.daysCap,
+          created: document.created,
+          dmg: document.dmg,
+          hp: document.hp,
+          lastModified: document.lastModified,
+          level: document.level,
+          name: document.name,
+          ownerAddress: document.ownerAddress,
+          ownerId: document.ownerId,
+          price: document.price,
+          pricePerBattle: document.pricePerBattle,
+          priceSymbol: document.priceSymbol,
+          rarity: document.rarity,
+          refId: document.refId,
+          role: document.role,
+          skinId: document.skinId,
+          skinName: document.skinName,
+          statusId: document.statusId,
+          tokenId: document.tokenId,
+          trophyClass: document.trophyClass,
+          type: document.type,
           updated: now,
           apr: (365 / totalDays) * roi * 100,
           fiatSymbol: currency.symbol,
