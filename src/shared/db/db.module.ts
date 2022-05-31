@@ -5,14 +5,20 @@ import {
   HeroListing,
   HeroListingSchema,
 } from './hero-listing/hero-listing.schema';
+import {
+  RentalListing,
+  RentalListingRepository,
+  RentalListingSchema,
+} from './rental-listing';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: HeroListing.name, schema: HeroListingSchema },
+      { name: RentalListing.name, schema: RentalListingSchema },
     ]),
   ],
-  providers: [HeroListingRepository],
-  exports: [HeroListingRepository],
+  providers: [HeroListingRepository, RentalListingRepository],
+  exports: [HeroListingRepository, RentalListingRepository],
 })
 export class DbModule {}

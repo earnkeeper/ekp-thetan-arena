@@ -86,7 +86,6 @@ export class MarketBuyService {
 
         const updatedDocument: MarketBuyDocument = {
           id: document.id,
-          updated: document.updated,
           battleCap: document.battleCap,
           battleCapMax: document.battleCapMax,
           battlesUsed: document.battlesUsed,
@@ -112,6 +111,7 @@ export class MarketBuyService {
           trophyClass: document.trophyClass,
           type: document.type,
           apr: (365 / totalDays) * roi * 100,
+          updated: now,
           fiatSymbol: currency.symbol,
           priceFiat: coinPrice.price * document.price,
           priceFiatPerBattle: coinPrice.price * document.pricePerBattle,
