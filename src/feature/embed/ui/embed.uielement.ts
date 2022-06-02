@@ -1,36 +1,66 @@
+import { col, fiat, row, span, switchRange } from '@/util';
 import {
+  Col,
   Div,
+  formatPercent,
   formatTemplate,
   Image,
   Row,
+  Span,
   switchCase,
   UiElement,
 } from '@earnkeeper/ekp-sdk';
-import { col, profitCell, span } from '@/util';
 
 export default function element(): UiElement {
   return Row({
-    className: 'm-0 px-1',
-    context: '$.data[0]',
     children: [
-      col('', nameRow()),
-      col('col-auto my-auto p-0', profitCell('$.profitFiat', '$.roi')),
+      Col({
+        className: 'col-12',
+        children: [Span({ content: 'Top Return on Investment' })],
+      }),
+      Col({
+        className: 'col-12',
+        children: [marketRow(2)],
+      }),
+      Col({
+        className: 'col-12',
+        children: [marketRow(1)],
+      }),
+      Col({
+        className: 'col-12',
+        children: [marketRow(0)],
+      }),
+    ],
+  });
+}
+
+function marketRow(index: number) {
+  return Row({
+    context: `$.data[${index}]`,
+    className: 'pt-1',
+    children: [
+      Col({
+        children: [nameRow()],
+      }),
+      Col({
+        className: 'col-auto my-auto',
+        children: [profitCell('$.profitFiat', '$.roi')],
+      }),
     ],
   });
 }
 
 function nameRow() {
   return Row({
-    className: 'my-1',
     children: [
       col(
-        'col-auto my-auto pl-0',
+        'col-auto my-auto',
         Image({
           src: formatTemplate(
             'https://assets.thetanarena.com/skin/avatar/{{ skinId }}.png',
             { skinId: '$.skinId' },
           ),
-          height: '38px',
+          height: '32px',
         }),
       ),
       col(
@@ -55,11 +85,31 @@ function nameRow() {
         Row({
           className: 'mx-0',
           children: [
+            col('col-12 p-0 font-small-4 font-weight-bold', span('$.name')),
             col('col-12 p-0 font-small-1', span('$.skinName')),
-            col('col-12 p-0 font-medium-2 font-weight-bold', span('$.name')),
           ],
         }),
       ),
     ],
   });
+}
+
+export function profitCell(profitRpc: string, roiRpc: string) {
+  return row([
+    col(
+      'col-12',
+      span(fiat(profitRpc), 'float-right font-small-4 font-weight-bold'),
+    ),
+    col(
+      'col-12',
+      span(
+        formatPercent(roiRpc),
+        switchRange(
+          profitRpc,
+          [, 0, 'text-danger float-right font-small-2'],
+          [0, , 'text-success float-right font-small-2'],
+        ),
+      ),
+    ),
+  ]);
 }

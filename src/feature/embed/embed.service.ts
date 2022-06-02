@@ -24,7 +24,7 @@ export class EmbedService {
 
     const expectedWinRate = 50;
 
-    const bestRoi: MarketBuyDocument = _.chain(documents)
+    const bestRoi: MarketBuyDocument[] = _.chain(documents)
       .filter((document) => document.battleCap > 0)
       .map((document) => {
         const coinPrice = prices.find((it) => it.coinId === 'thetan-coin');
@@ -104,9 +104,9 @@ export class EmbedService {
         return updatedDocument;
       })
       .sortBy('profitFiat')
-      .last()
+      .takeRight(3)
       .value();
 
-    return [bestRoi];
+    return bestRoi;
   }
 }
