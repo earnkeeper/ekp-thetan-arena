@@ -98,7 +98,14 @@ export function profitCell(profitRpc: string, roiRpc: string) {
   return row([
     col(
       'col-12',
-      span(fiat(profitRpc), 'float-right font-small-4 font-weight-bold'),
+      span(
+        fiat(profitRpc),
+        switchRange(
+          profitRpc,
+          [, 0, 'text-danger float-right font-small-4'],
+          [0, , 'text-success float-right font-small-4'],
+        ),
+      ),
     ),
     col(
       'col-12',
