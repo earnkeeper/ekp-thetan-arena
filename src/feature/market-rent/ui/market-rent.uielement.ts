@@ -79,7 +79,7 @@ function marketRow(): UiElement {
     defaultSortAsc: false,
     data: documents(MarketRentDocument),
     busyWhen: isBusy(collection(MarketRentDocument)),
-    paginationPerPage: 50,
+    paginationPerPage: 25,
     onRowClicked: navigate(
       formatTemplate(`market-detail/{{ refId }}`, {
         refId: '$.refId',

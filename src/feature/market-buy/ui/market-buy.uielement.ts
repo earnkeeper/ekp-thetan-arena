@@ -78,7 +78,7 @@ function tableRow(): UiElement {
     defaultSortAsc: false,
     data: documents(MarketBuyDocument),
     busyWhen: isBusy(collection(MarketBuyDocument)),
-    paginationPerPage: 50,
+    paginationPerPage: 25,
     onRowClicked: navigate(
       formatTemplate(`market-detail/{{ refId }}`, {
         refId: '$.refId',
