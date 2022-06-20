@@ -80,43 +80,33 @@ function nameRow() {
           children: [],
         }),
       ),
-      col(
-        'col-auto px-0',
-        Row({
-          className: 'mx-0',
-          children: [
-            col('col-12 p-0 font-small-4 font-weight-bold', span('$.name')),
-            col('col-12 p-0 font-small-1', span('$.skinName')),
-          ],
-        }),
-      ),
+      col('col-auto px-0', [
+        span('$.name', 'font-small-4 font-weight-bold d-block'),
+        span('$.skinName', 'p-0 font-small-1 d-block'),
+      ]),
     ],
   });
 }
 
 export function profitCell(profitRpc: string, roiRpc: string) {
-  return row([
-    col(
-      'col-12',
+  return Div({
+    children: [
       span(
         fiat(profitRpc),
         switchRange(
           profitRpc,
-          [, 0, 'text-danger float-right font-small-4'],
-          [0, , 'text-success float-right font-small-4'],
+          [, 0, 'text-danger text-right font-small-4 d-block'],
+          [0, , 'text-success text-right font-small-4 d-block'],
         ),
       ),
-    ),
-    col(
-      'col-12',
       span(
         formatPercent(roiRpc),
         switchRange(
           profitRpc,
-          [, 0, 'text-danger float-right font-small-2'],
-          [0, , 'text-success float-right font-small-2'],
+          [, 0, 'text-danger text-right font-small-2 d-block'],
+          [0, , 'text-success text-right font-small-2 d-block'],
         ),
       ),
-    ),
-  ]);
+    ],
+  });
 }
