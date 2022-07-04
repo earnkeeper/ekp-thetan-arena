@@ -53,6 +53,8 @@ export class RentalListing {
   readonly trophyClass: number;
   @Prop()
   readonly type: number;
+  @Prop()
+  readonly rentBattles: number;
 }
 
 export const RentalListingSchema = SchemaFactory.createForClass(RentalListing);

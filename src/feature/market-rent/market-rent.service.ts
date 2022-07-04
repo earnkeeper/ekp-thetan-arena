@@ -143,7 +143,7 @@ export class MarketRentService {
         const w_pc = expectedWinRate / 100; // percent of matches won
         const w_thc = winReward + winBonus; // thc earned for a win
         const l_thc = lossReward; // thc earned for a loss
-        const b = document.battleCap; // battles available
+        const  b = document.rentBattles; // battles available for rent
         const c_thc = document.price; // cost (the nft price)
 
         // Revenue at the user entered win rate
